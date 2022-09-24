@@ -1,7 +1,9 @@
 import { ErrorRequestHandler } from 'express';
+import { writeInFile } from 'helpers/writeInFile';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const error: ErrorRequestHandler = (err, req, res, next) => {
+const error: ErrorRequestHandler = async (err, req, res, next) => {
+	await writeInFile({ path: 'file.log', context: '[ERROR]\n' + JSON.stringify(err) });
 	const status = err.statusCode || 500;
 
 	if (err?.response?.data) {

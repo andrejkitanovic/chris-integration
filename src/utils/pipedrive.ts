@@ -32,7 +32,7 @@ type PipedriveDealType = {
 
 // CONTACTS
 
-export const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
+const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
 	return {
 		name: body.namn,
 		primary_email: body.email,
@@ -91,9 +91,10 @@ export const pipedriveUpdateContact = async (contactId: string, contactData: Adv
 
 // DEALS
 
-export const pipedriveDealFormat = (body: AdversusBody): PipedriveDealType => {
+const pipedriveDealFormat = (body: AdversusBody & { pipedriveContactId?: number }): PipedriveDealType => {
 	return {
 		title: `${body.namn} / ${body.adress} (${body.stad})`,
+		person_id: body.pipedriveContactId,
 	};
 };
 
@@ -107,8 +108,8 @@ export const pipedriveSearchDeal = async (name: string) => {
 			},
 		});
 
-		if (data?.items) {
-			return data.items[0].item;
+		if (data?.data?.items) {
+			return data.data.items[0].item;
 		}
 		return;
 	} catch (err: any) {
@@ -116,7 +117,7 @@ export const pipedriveSearchDeal = async (name: string) => {
 	}
 };
 
-export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveContactId: string }) => {
+export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveContactId: number }) => {
 	try {
 		const deal = pipedriveDealFormat(dealData);
 		const { data } = await pipedriveAPI.post(`/deals`, {

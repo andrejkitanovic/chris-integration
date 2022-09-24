@@ -34,8 +34,3 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
-
-// import { pipedriveSearchContact } from 'utils/pipedrive';
-// (async function () {
-// 	console.log(await pipedriveSearchContact('mattias.svernedahl@test.com')?.id)
-// })();
