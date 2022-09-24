@@ -1,8 +1,15 @@
 import { RequestHandler } from 'express';
-import { pipedriveSearchDeal, pipedriveCreateDeal, pipedriveUpdateDeal, pipedriveDeleteDeal } from 'utils/pipedrive';
-import { trelloSearchCard, trelloCreateCard, trelloUpdateCard, trelloDeleteCard } from 'utils/trello';
+import {
+	pipedriveSearchDeal,
+	pipedriveCreateDeal,
+	pipedriveUpdateDeal,
+	pipedriveDeleteDeal,
+	pipedriveCreateContact,
+	pipedriveUpdateContact,
+	pipedriveSearchContact,
+} from 'utils/pipedrive';
 
-export type PostAdversusBody = {
+export type AdversusBody = {
 	adress: string;
 	apartment: string;
 	bekraftelse: string;
@@ -24,26 +31,25 @@ export type PostAdversusBody = {
 	stad: string;
 	telefon: string;
 	typ_av_tak: string;
+	email: string;
 	contact_id: string;
 };
 
 export const postWebhookBookingCreated: RequestHandler = async (req, res, next) => {
 	try {
-		// const {} = req.body;
+		const requestBody: AdversusBody = req.body;
 
-		// [PIPEDRIVE][CONTACT] Create / Find
+		// [PIPEDRIVE][CONTACT] Find -> T: Pass | F: Create
+		let pipedriveContact = null;
+
+		if (!pipedriveContact) {
+			pipedriveContact = await pipedriveCreateContact(requestBody);
+		}
 
 		// [PIPEDRIVE][DEAL] Create
-		await pipedriveCreateDeal({
-			title: '',
-		});
+		await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
 
-		// [GOOGLE][MEETING] Cancel
-
-		// [TRELLO][CARD] Create
-		await trelloCreateCard({
-			name: '',
-		});
+		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
 
 		res.json({
 			message: 'Success',
@@ -55,23 +61,25 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 
 export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) => {
 	try {
-		// const {} = req.body;
+		const requestBody: AdversusBody = req.body;
 
-		// [PIPEDRIVE][CONTACT] Find
+		// [PIPEDRIVE][CONTACT] Find -> T: Update | F: Pass
+		let pipedriveContact = await pipedriveSearchContact(requestBody.email);
 
-		// [PIPEDRIVE][DEAL] Update
-		const pipedriveDeal = await pipedriveSearchDeal('');
-		await pipedriveUpdateDeal(pipedriveDeal?.id, {
-			title: '',
-		});
+		if (pipedriveContact) {
+			pipedriveContact = await pipedriveUpdateContact(pipedriveContact?.id, requestBody);
+		}
 
-		// [GOOGLE][MEETING] Cancel
+		// [PIPEDRIVE][DEAL] Update -> T: Update | F: Pass
+		const pipedriveDeal = await pipedriveSearchDeal(
+			`${requestBody.namn} / ${requestBody.adress} (${requestBody.stad})`
+		);
 
-		// [TRELLO][CARD] Update
-		const trelloCardId = (await trelloSearchCard(''))?.id;
-		await trelloUpdateCard(trelloCardId, {
-			name: '',
-		});
+		if (pipedriveDeal) {
+			await pipedriveUpdateDeal(pipedriveDeal?.id, requestBody);
+		}
+
+		// [GOOGLE][MEETING] Delete
 
 		res.json({
 			message: 'Success',
@@ -83,17 +91,18 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 
 export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) => {
 	try {
-		// const {} = req.body;
+		const requestBody: AdversusBody = req.body;
 
-		// [PIPEDRIVE][DEAL] Delete
-		const pipedriveDeal = await pipedriveSearchDeal('');
-		await pipedriveDeleteDeal(pipedriveDeal?.id);
+		// [PIPEDRIVE][DEAL] Find -> T: Delete | F: Pass
+		const pipedriveDeal = await pipedriveSearchDeal(
+			`${requestBody.namn} / ${requestBody.adress} (${requestBody.stad})`
+		);
 
-		// [GOOGLE][MEETING] Cancel
+		if (pipedriveDeal) {
+			await pipedriveDeleteDeal(pipedriveDeal?.id);
+		}
 
-		// [TRELLO][CARD] Delete
-		const trelloCardId = (await trelloSearchCard(''))?.id;
-		await trelloDeleteCard(trelloCardId);
+		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
 
 		res.json({
 			message: 'Success',

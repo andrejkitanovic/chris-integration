@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PostAdversusBody } from 'controllers/adversus';
+import { AdversusBody } from 'controllers/adversus';
 
 const pipedriveAPI = axios.create({
 	baseURL: 'https://api.pipedrive.com/v1',
@@ -9,7 +9,9 @@ const pipedriveAPI = axios.create({
 });
 
 type PipedriveContactType = {
-	// title: string;
+	name: string;
+	primary_email?: string;
+	phone?: string[];
 };
 
 type PipedriveDealType = {
@@ -26,6 +28,16 @@ type PipedriveDealType = {
 	lost_reason?: string;
 	visible_to?: string;
 	add_time?: string;
+};
+
+// CONTACTS
+
+export const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
+	return {
+		name: body.namn,
+		primary_email: body.email,
+		phone: [body.mobile],
+	};
 };
 
 export const pipedriveSearchContact = async (email: string) => {
@@ -47,11 +59,12 @@ export const pipedriveSearchContact = async (email: string) => {
 	}
 };
 
-export const pipedriveCreateContact = async (contactData: PipedriveContactType) => {
+export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 	try {
+		const contact = pipedriveContactFormat(contactData);
 		const { data } = await pipedriveAPI.post(`/persons`, {
 			body: {
-				...contactData,
+				...contact,
 			},
 		});
 
@@ -61,7 +74,24 @@ export const pipedriveCreateContact = async (contactData: PipedriveContactType) 
 	}
 };
 
-export const pipedriveDealFormat = (body: PostAdversusBody): PipedriveDealType => {
+export const pipedriveUpdateContact = async (contactId: string, contactData: AdversusBody) => {
+	try {
+		const contact = pipedriveContactFormat(contactData);
+		const { data } = await pipedriveAPI.put(`/persons/${contactId}`, {
+			body: {
+				...contact,
+			},
+		});
+
+		return data;
+	} catch (err: any) {
+		throw new Error(err);
+	}
+};
+
+// DEALS
+
+export const pipedriveDealFormat = (body: AdversusBody): PipedriveDealType => {
 	return {
 		title: `${body.namn} / ${body.adress} (${body.stad})`,
 	};
@@ -86,12 +116,13 @@ export const pipedriveSearchDeal = async (name: string) => {
 	}
 };
 
-export const pipedriveCreateDeal = async (dealData: PipedriveDealType) => {
+export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveContactId: string }) => {
 	try {
+		const deal = pipedriveDealFormat(dealData);
 		const { data } = await pipedriveAPI.post(`/deals`, {
 			body: {
 				stage_id: process.env.PIPEDRIVE_STAGE_ID,
-				...dealData,
+				...deal,
 			},
 		});
 
@@ -101,11 +132,12 @@ export const pipedriveCreateDeal = async (dealData: PipedriveDealType) => {
 	}
 };
 
-export const pipedriveUpdateDeal = async (dealId: string, dealData: PipedriveDealType) => {
+export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody) => {
 	try {
+		const deal = pipedriveDealFormat(dealData);
 		const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
 			stage_id: process.env.PIPEDRIVE_STAGE_ID,
-			...dealData,
+			...deal,
 		});
 		return data;
 	} catch (err: any) {
