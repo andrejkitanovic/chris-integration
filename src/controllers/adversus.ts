@@ -8,8 +8,8 @@ import {
 	pipedriveUpdateContact,
 	pipedriveSearchContact,
 } from 'utils/pipedrive';
-import User from 'models/user';
-import { useGoogle } from 'utils/google';
+// import User from 'models/user';
+// import { useGoogle } from 'utils/google';
 
 export type AdversusBody = {
 	adress: string;
@@ -53,11 +53,11 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
 
 		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
-		const user = await User.findOne({ email: requestBody.email });
+		// const user = await User.findOne({ email: requestBody.email });
 
-		if (user) {
-			const { googleDeleteCalendarEvent } = await useGoogle(user);
-		}
+		// if (user) {
+		// 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
+		// }
 
 		res.json({
 			message: 'Success',
@@ -88,11 +88,11 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 		}
 
 		// [GOOGLE][MEETING] Delete
-		const user = await User.findOne({ email: requestBody.email });
+		// const user = await User.findOne({ email: requestBody.email });
 
-		if (user) {
-			const { googleDeleteCalendarEvent } = await useGoogle(user);
-		}
+		// if (user) {
+		// 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
+		// }
 
 		res.json({
 			message: 'Success',
@@ -116,11 +116,11 @@ export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) 
 		}
 
 		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
-		const user = await User.findOne({ email: requestBody.email });
+		// const user = await User.findOne({ email: requestBody.email });
 
-		if (user) {
-			const { googleDeleteCalendarEvent } = await useGoogle(user);
-		}
+		// if (user) {
+		// 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
+		// }
 
 		res.json({
 			message: 'Success',

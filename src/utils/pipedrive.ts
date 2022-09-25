@@ -11,7 +11,11 @@ const pipedriveAPI = axios.create({
 type PipedriveContactType = {
 	name: string;
 	primary_email?: string;
-	phone?: string[];
+	phone?: {
+		value: string;
+		primary: boolean;
+		label: string;
+	}[];
 };
 
 type PipedriveDealType = {
@@ -36,8 +40,18 @@ const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
 	return {
 		name: body.namn,
 		primary_email: body.email,
-		phone: [body.mobile],
+		phone: [{ value: body.mobile, primary: true, label: 'work' }],
 	};
+};
+
+export const pipedriveGetContacts = async () => {
+	try {
+		const { data } = await pipedriveAPI.get(`/persons`);
+
+		return data?.data;
+	} catch (err: any) {
+		throw new Error(err);
+	}
 };
 
 export const pipedriveSearchContact = async (email: string) => {

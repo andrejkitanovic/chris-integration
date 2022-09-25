@@ -34,3 +34,9 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
+
+import { pipedriveGetContacts } from 'utils/pipedrive';
+
+(async function(){
+	console.log(await pipedriveGetContacts())
+}())
