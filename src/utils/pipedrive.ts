@@ -11,6 +11,11 @@ const pipedriveAPI = axios.create({
 type PipedriveContactType = {
 	name: string;
 	primary_email?: string;
+	email?: {
+		value: string;
+		primary: boolean;
+		label: string;
+	}[];
 	phone?: {
 		value: string;
 		primary: boolean;
@@ -39,7 +44,7 @@ type PipedriveDealType = {
 const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
 	return {
 		name: body.namn,
-		primary_email: body.epost,
+		email: [{ value: body.epost, primary: true, label: 'work' }],
 		phone: [{ value: body.mobile, primary: true, label: 'work' }],
 	};
 };
@@ -59,7 +64,7 @@ export const pipedriveSearchContact = async (email: string) => {
 		},
 	});
 
-	if (data?.data?.items) {
+	if (data?.data?.items?.length) {
 		return data.data?.items[0].item;
 	}
 	return;
@@ -68,9 +73,7 @@ export const pipedriveSearchContact = async (email: string) => {
 export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 	const contact = pipedriveContactFormat(contactData);
 	const { data } = await pipedriveAPI.post(`/persons`, {
-		body: {
-			...contact,
-		},
+		...contact,
 	});
 
 	return data;
@@ -79,9 +82,7 @@ export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 export const pipedriveUpdateContact = async (contactId: string, contactData: AdversusBody) => {
 	const contact = pipedriveContactFormat(contactData);
 	const { data } = await pipedriveAPI.put(`/persons/${contactId}`, {
-		body: {
-			...contact,
-		},
+		...contact,
 	});
 
 	return data;
@@ -105,7 +106,7 @@ export const pipedriveSearchDeal = async (name: string) => {
 		},
 	});
 
-	if (data?.data?.items) {
+	if (data?.data?.items?.length) {
 		return data.data.items[0].item;
 	}
 	return;
@@ -114,10 +115,8 @@ export const pipedriveSearchDeal = async (name: string) => {
 export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveContactId: number }) => {
 	const deal = pipedriveDealFormat(dealData);
 	const { data } = await pipedriveAPI.post(`/deals`, {
-		body: {
-			stage_id: process.env.PIPEDRIVE_STAGE_ID,
-			...deal,
-		},
+		stage_id: process.env.PIPEDRIVE_STAGE_ID,
+		...deal,
 	});
 
 	return data;
