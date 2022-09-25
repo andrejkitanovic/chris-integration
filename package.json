@@ -8,13 +8,14 @@
 		"start:dev": "ts-node ./src/app.ts",
 		"start": "node ./dist/app.js",
 		"watch": "nodemon ./src/app.ts",
-		"build": "tsc",
+		"build": "tsc && npm run copy-views",
 		"postinstall": "tsc",
 		"test": "jest --passWithNoTests",
 		"format:check": "prettier --check ./src/**/*.ts",
 		"format:write": "prettier --write ./src/**/*.ts",
 		"lint:check": "eslint ./src/**/*.ts",
-		"lint:fix": "eslint --fix ./src/**/*.ts"
+		"lint:fix": "eslint --fix ./src/**/*.ts",
+		"copy-views": "cp -r ./src/views ./dist"
 	},
 	"author": "Andrej Kitanovic",
 	"license": "ISC",
