@@ -9,6 +9,9 @@ export default function (app: Express) {
 			.split(/(?=[A-Z])/)
 			.join('-')
 			.toLowerCase();
-		app.use(`/api/${name}`, dir[camelCaseName].default);
+
+		if (name !== 'views') {
+			app.use(`/api/${name}`, dir[camelCaseName].default);
+		}
 	});
 }

@@ -39,7 +39,7 @@ type PipedriveDealType = {
 const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
 	return {
 		name: body.namn,
-		primary_email: body.email,
+		primary_email: body.epost,
 		phone: [{ value: body.mobile, primary: true, label: 'work' }],
 	};
 };
