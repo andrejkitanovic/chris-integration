@@ -19,10 +19,13 @@ import cors from 'cors';
 import headersMiddleware from 'middlewares/headers';
 import errorMiddleware from 'middlewares/error';
 import connection from 'helpers/connection';
+import path from 'path';
 
 import routing from 'routes';
 
 const app = express();
+app.set('views', [path.join(__dirname, '/views')]);
+app.set('view engine', 'pug');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

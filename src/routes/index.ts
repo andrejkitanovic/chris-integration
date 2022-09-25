@@ -12,6 +12,8 @@ export default function (app: Express) {
 
 		if (name !== 'views') {
 			app.use(`/api/${name}`, dir[camelCaseName].default);
+		} else {
+			app.use('', dir[camelCaseName].default);
 		}
 	});
 }
