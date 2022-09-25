@@ -32,7 +32,8 @@ app.use(cors());
 
 // storage(app);
 app.use(headersMiddleware);
-app.use('/logs', express.static('file.log'));
+app.use('/logs/requests', express.static('logs/request.log'));
+app.use('/logs/errors', express.static('logs/error.log'));
 routing(app);
 app.use(errorMiddleware);
 

@@ -67,7 +67,7 @@ export type AdversusBody = {
 export const postWebhookBookingCreated: RequestHandler = async (req, res, next) => {
 	try {
 		const requestBody: AdversusBody = req.body;
-		await writeInFile({ path: 'request.log', context: JSON.stringify(req.body) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
 
 		// [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Create
 
@@ -98,7 +98,7 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) => {
 	try {
 		const requestBody: AdversusBody = req.body;
-		await writeInFile({ path: 'request.log', context: JSON.stringify(req.body) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
 
 		// [PIPEDRIVE][CONTACT] Find -> T: Update | F: Pass
 		let pipedriveContact = await pipedriveSearchContact(requestBody.epost);
@@ -134,7 +134,7 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) => {
 	try {
 		const requestBody: AdversusBody = req.body;
-		await writeInFile({ path: 'request.log', context: JSON.stringify(req.body) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
 
 		// [PIPEDRIVE][DEAL] Find -> T: Delete | F: Pass
 		const pipedriveDeal = await pipedriveSearchDeal(
