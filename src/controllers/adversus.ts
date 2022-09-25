@@ -71,14 +71,13 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][CONTACT] Find -> T: Use | F: Create
 		let pipedriveContact = await pipedriveSearchContact(requestBody.epost);
-
 		if (!pipedriveContact) {
 			pipedriveContact = await pipedriveCreateContact(requestBody);
 		}
 
 		// [PIPEDRIVE][DEAL] Create
 		await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
-
+		console.log('DEAL CREATED')
 		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
 		// const user = await User.findOne({ email: requestBody.user_email });
 
