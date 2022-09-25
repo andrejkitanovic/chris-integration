@@ -21,6 +21,18 @@ type PipedriveContactType = {
 		primary: boolean;
 		label: string;
 	}[];
+	adress?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a?: string; // address
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_subpremise?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_street_number?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_route?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_sublocality?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_locality?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_admin_area_level_1?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_admin_area_level_2?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_country?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_postal_code?: string;
+	f74cb56204d9608f9b8d4692ab034a135ae7389a_formatted_address?: string; // address
 };
 
 type PipedriveDealType = {
@@ -46,6 +58,17 @@ const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
 		name: body.namn,
 		email: [{ value: body.epost, primary: true, label: 'work' }],
 		phone: [{ value: body.mobile, primary: true, label: 'work' }],
+		f74cb56204d9608f9b8d4692ab034a135ae7389a: body.adress,
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_subpremise: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_street_number: body.hem,
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_route: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_sublocality: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_locality: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_admin_area_level_1: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_admin_area_level_2: '',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_country: 'Sweeden',
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_postal_code: body.postnummer,
+		f74cb56204d9608f9b8d4692ab034a135ae7389a_formatted_address: body.adress,
 	};
 };
 
@@ -76,7 +99,7 @@ export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 		...contact,
 	});
 
-	return data;
+	return data?.data;
 };
 
 export const pipedriveUpdateContact = async (contactId: string, contactData: AdversusBody) => {
@@ -85,7 +108,7 @@ export const pipedriveUpdateContact = async (contactId: string, contactData: Adv
 		...contact,
 	});
 
-	return data;
+	return data?.data;
 };
 
 // DEALS
@@ -94,6 +117,7 @@ const pipedriveDealFormat = (body: AdversusBody & { pipedriveContactId?: number 
 	return {
 		title: `${body.namn} / ${body.adress} (${body.stad})`,
 		person_id: body.pipedriveContactId,
+		currency: 'SEK',
 	};
 };
 
@@ -119,7 +143,7 @@ export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveCo
 		...deal,
 	});
 
-	return data;
+	return data?.data;
 };
 
 export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody) => {
@@ -128,10 +152,14 @@ export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody
 		stage_id: process.env.PIPEDRIVE_STAGE_ID,
 		...deal,
 	});
-	return data;
+
+	return data?.data;
 };
 
 export const pipedriveDeleteDeal = async (dealId: string) => {
 	const { data } = await pipedriveAPI.delete(`/deals/${dealId}`);
-	return data;
+
+	return data?.data;
 };
+
+// ACTIVITY

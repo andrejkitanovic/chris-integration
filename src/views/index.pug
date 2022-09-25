@@ -2,5 +2,9 @@ extends layout/layout.pug
 
 block content
     div.container
-        //- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        div.g-signin2(data-onsuccess="googleLogin") AUTHENTICATE
+        div.mb-3
+            div.list-group
+                div.list-group-item.d-flex.justify-content-between.align-items-center 
+                    p.my-0 christian@mersol.se
+                    span.badge.badge-success Authenticated
+        div.g-signin2.ml-1.text-uppercase(data-onsuccess="googleLogin" data-theme="dark")

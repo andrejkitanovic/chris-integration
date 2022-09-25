@@ -12,31 +12,6 @@ import {
 // import User from 'models/user';
 // import { useGoogle } from 'utils/google';
 
-// adress: "Källebäcken Kilåsen 1"
-// apartment: ""
-// bekraftelse: "Epost"
-// building_year: "1934"
-// contact_id: "439685685"
-// email: "robert@mersol.se"
-// energiforbruking: "25000"
-// epost: "gorms.kennel@gmail.com"
-// har_du_fyllt_i_mobilfaltet: ""
-// hem: "20A"
-// land_area: "3053"
-// living: "villa"
-// living_area: "155"
-// lutning_pa_tak: "37 grader"
-// mobile: "707451689"
-// mote_kommentar: "Stort intresse. Dem har redan kollat med WetterSol och tagit in offert därifrån eller ska få iaf."
-// mote_tid: ""
-// namn: "Eva Rhodin"
-// placering_av_elcentral: "Tvättstugan"
-// postnummer: "56692"
-// stad: "Habo"
-// telefon: ""
-// typ_av_tak: "Betongpannor"
-// user_email: "daniel@mersol.se"
-
 export type AdversusBody = {
 	adress: string;
 	apartment: string;
@@ -59,9 +34,9 @@ export type AdversusBody = {
 	stad: string;
 	telefon: string;
 	typ_av_tak: string;
-	email: string; // Created by
 	contact_id: string;
 	user_email: string; // Meeting with
+	meeting_time: string;
 };
 
 export const postWebhookBookingCreated: RequestHandler = async (req, res, next) => {
@@ -80,6 +55,7 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][DEAL] Create
 		await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
+		
 		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
 		// const user = await User.findOne({ email: requestBody.user_email });
 
