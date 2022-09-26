@@ -9,7 +9,4 @@ block content
                         span.ml-2.text-muted (christian@mersol.se)
                     span.badge.badge-success Authenticated
 
-        script(src='https://accounts.google.com/gsi/client' async defer)
-        div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="handleCredentialResponse")
-        div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-type="standard" data-theme="dark")
-    script.
+        a(href=authorizationUrl).btn.btn-primary Authorize

@@ -1,29 +1,12 @@
+// eslint-disable-next-line no-undef
+let params = new URLSearchParams(document.location.search);
+let code = params.get("code");
 
-
-function decodeJwtResponse(token) {
-    let base64Url = token.split('.')[1]
-    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function handleCredentialResponse(response) {
-    const token = response.credential;
-    const { name, email, sub, exp } = decodeJwtResponse(token);
-
-    const user = {
-        id: sub,
-        name,
-        email,
-        token,
-        exp
-    }
-
+if (code) {
     // eslint-disable-next-line no-undef
-    await axios.post(`/api/user`, user);
+    document.location.search = ""
+    // eslint-disable-next-line no-undef
+    axios.post(`/api/user`, { code });
 }
 
 
