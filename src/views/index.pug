@@ -9,17 +9,6 @@ block content
                     span.badge.badge-success Authenticated
 
         script(src='https://accounts.google.com/gsi/client' async defer)
-        div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="onSignIn")
+        div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="handleCredentialResponse")
         div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-type="standard" data-theme="dark")
     script.
-        function onSignIn(googleUser) {
-            console.log(googleUser);
-            console.log(googleUser.getBasicProfile())
-            //- const profile = googleUser.getBasicProfile();
-            //- axios.post('/api/webhook', {
-            //-     type: "google",
-            //-     idToken: googleUser.getAuthResponse().id_token,
-            //-     fullName: profile.getName(),
-            //-     email: profile.getEmail()
-            //- })
-        }
