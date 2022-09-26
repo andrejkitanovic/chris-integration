@@ -62,11 +62,11 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		const user = await User.findOne({ email: requestBody.user_email });
 
 		if (user) {
-			const { googleGetCalendarSearchEvent } = await useGoogle(user);
+			const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
 			const meeting = await googleGetCalendarSearchEvent(requestBody.meeting_time);
 
 			if (meeting) {
-				console.log('found meeting');
+				await googleDeleteCalendarEvent(meeting.id);
 			}
 		}
 
@@ -82,6 +82,7 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 			message: 'Success',
 		});
 	} catch (err) {
+		console.log(err);
 		next(err);
 	}
 };

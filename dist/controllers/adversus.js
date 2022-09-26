@@ -33,10 +33,10 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
         // [GOOGLE][MEETING] Find -> T: Delete | F: Pass
         const user = yield user_1.default.findOne({ email: requestBody.user_email });
         if (user) {
-            const { googleGetCalendarSearchEvent } = yield (0, google_1.useGoogle)(user);
+            const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = yield (0, google_1.useGoogle)(user);
             const meeting = yield googleGetCalendarSearchEvent(requestBody.meeting_time);
             if (meeting) {
-                console.log('found meeting');
+                yield googleDeleteCalendarEvent(meeting.id);
             }
         }
         // [PIPEDRIVE][ACTIVITY] Create Meeting
@@ -46,6 +46,7 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
         });
     }
     catch (err) {
+        console.log(err);
         next(err);
     }
 });
