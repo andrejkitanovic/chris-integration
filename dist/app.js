@@ -35,3 +35,10 @@ app.use('/logs/errors', express_1.default.static('logs/error.log'));
 (0, routes_1.default)(app);
 app.use(error_1.default);
 (0, connection_1.default)(app);
+// import { useGoogle } from 'utils/google';
+// import User, { IUser } from 'models/user';
+// (async function () {
+// 	const user = (await User.findOne({ email: 'simon@mersol.se' })) as IUser;
+// 	const { googleDeleteCalendarEvent } = await useGoogle(user);
+// 	console.log(await googleDeleteCalendarEvent("2022-09-09T11:00:00"));
+// })();

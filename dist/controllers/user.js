@@ -52,12 +52,6 @@ const postUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             throw new Error('Missing payload');
         if (!tokenData.refresh_token)
             throw new Error('Missing refresh token');
-        console.log({
-            name: payload.name,
-            email: payload.email,
-            clientId: payload.sub,
-            refreshToken: tokenData.refresh_token,
-        });
         yield user_1.default.create({
             name: payload.name,
             email: payload.email,

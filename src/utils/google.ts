@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IUser } from 'models/user';
+import dayjs from 'dayjs';
 
 export const useGoogle = async (user: IUser) => {
 	const {
@@ -17,18 +18,9 @@ export const useGoogle = async (user: IUser) => {
 			Authorization: `Bearer ${access_token}`,
 		},
 	});
+	const calendarId = user.email;
 
-	const googleGetCalendarList = async () => {
-		try {
-			const { data } = await calendarGoogleAPI.get(`/users/me/calendarList`);
-
-			return data;
-		} catch (err: any) {
-			throw new Error(err);
-		}
-	};
-
-	const googleGetCalendarSearchEvent = async (calendarId: string) => {
+	const googleGetCalendarSearchEvent = async (meeting_time: string) => {
 		try {
 			const { data } = await calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
 				params: {
@@ -36,13 +28,23 @@ export const useGoogle = async (user: IUser) => {
 				},
 			});
 
-			return data;
+			if (data?.items) {
+				const findMeeting = data?.items?.find(
+					(item: any) =>
+						item.summary === 'Möte med Mersol' &&
+						dayjs(item.start.dateTime).diff(dayjs(meeting_time).add(2, 'hours')) === 0
+				);
+
+				return findMeeting;
+			}
+
+			return data?.items;
 		} catch (err: any) {
 			throw new Error(err);
 		}
 	};
 
-	const googleDeleteCalendarEvent = async (calendarId: string, eventId: string) => {
+	const googleDeleteCalendarEvent = async (eventId: string) => {
 		try {
 			const { data } = await calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
 
@@ -53,7 +55,6 @@ export const useGoogle = async (user: IUser) => {
 	};
 
 	return {
-		googleGetCalendarList,
 		googleGetCalendarSearchEvent,
 		googleDeleteCalendarEvent,
 	};

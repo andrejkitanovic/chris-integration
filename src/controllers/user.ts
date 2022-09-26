@@ -42,13 +42,6 @@ export const postUser: RequestHandler = async (req, res, next) => {
 		if (!payload) throw new Error('Missing payload');
 		if (!tokenData.refresh_token) throw new Error('Missing refresh token');
 
-		console.log({
-			name: payload.name,
-			email: payload.email,
-			clientId: payload.sub,
-			refreshToken: tokenData.refresh_token,
-		});
-
 		await User.create({
 			name: payload.name,
 			email: payload.email,

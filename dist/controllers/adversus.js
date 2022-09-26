@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postWebhookBookingDeleted = exports.postWebhookBookingUpdated = exports.postWebhookBookingCreated = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
+const user_1 = __importDefault(require("models/user"));
+const google_1 = require("utils/google");
 const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const requestBody = req.body;
@@ -25,10 +30,15 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
         // [PIPEDRIVE][DEAL] Create
         yield (0, pipedrive_1.pipedriveCreateDeal)(Object.assign(Object.assign({}, requestBody), { pipedriveContactId: pipedriveContact === null || pipedriveContact === void 0 ? void 0 : pipedriveContact.id }));
         // [GOOGLE][MEETING] Find -> T: Delete | F: Pass
-        // const user = await User.findOne({ email: requestBody.user_email });
-        // if (user) {
-        // 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
-        // }
+        const user = yield user_1.default.findOne({ email: requestBody.user_email });
+        if (user) {
+            const { googleGetCalendarSearchEvent } = yield (0, google_1.useGoogle)(user);
+            const meeting = yield googleGetCalendarSearchEvent(requestBody.meeting_time);
+            if (meeting) {
+                console.log('found meeting');
+            }
+        }
+        // [PIPEDRIVE][ACTIVITY] Create Meeting
         res.json({
             message: 'Success',
         });
@@ -53,10 +63,15 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
             yield (0, pipedrive_1.pipedriveUpdateDeal)(pipedriveDeal === null || pipedriveDeal === void 0 ? void 0 : pipedriveDeal.id, requestBody);
         }
         // [GOOGLE][MEETING] Delete
-        // const user = await User.findOne({ email: requestBody.user_email });
-        // if (user) {
-        // 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
-        // }
+        const user = yield user_1.default.findOne({ email: requestBody.user_email });
+        if (user) {
+            const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = yield (0, google_1.useGoogle)(user);
+            const meeting = yield googleGetCalendarSearchEvent(requestBody.meeting_time);
+            if (meeting) {
+                yield googleDeleteCalendarEvent(meeting.id);
+            }
+        }
+        // [PIPEDRIVE][ACTIVITY] Update Meeting
         res.json({
             message: 'Success',
         });
@@ -70,16 +85,21 @@ const postWebhookBookingDeleted = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const requestBody = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body) });
+        // [PIPEDRIVE][ACTIVITY] Delete Meeting
         // [PIPEDRIVE][DEAL] Find -> T: Delete | F: Pass
         const pipedriveDeal = yield (0, pipedrive_1.pipedriveSearchDeal)(`${requestBody.namn} / ${requestBody.adress} (${requestBody.stad})`);
         if (pipedriveDeal) {
             yield (0, pipedrive_1.pipedriveDeleteDeal)(pipedriveDeal === null || pipedriveDeal === void 0 ? void 0 : pipedriveDeal.id);
         }
         // [GOOGLE][MEETING] Find -> T: Delete | F: Pass
-        // const user = await User.findOne({ email: requestBody.user_email });
-        // if (user) {
-        // 	const { googleGetCalendarSearchEvent } = await useGoogle(user);
-        // }
+        const user = yield user_1.default.findOne({ email: requestBody.user_email });
+        if (user) {
+            const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = yield (0, google_1.useGoogle)(user);
+            const meeting = yield googleGetCalendarSearchEvent(requestBody.meeting_time);
+            if (meeting) {
+                yield googleDeleteCalendarEvent(meeting.id);
+            }
+        }
         res.json({
             message: 'Success',
         });

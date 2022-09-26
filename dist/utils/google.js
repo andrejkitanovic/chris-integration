@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGoogle = void 0;
 const axios_1 = __importDefault(require("axios"));
+const dayjs_1 = __importDefault(require("dayjs"));
 const useGoogle = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { data: { access_token }, } = yield axios_1.default.post('https://oauth2.googleapis.com/token', {
         client_id: process.env.GOOGLE_CLIENT_ID,
@@ -27,29 +28,27 @@ const useGoogle = (user) => __awaiter(void 0, void 0, void 0, function* () {
             Authorization: `Bearer ${access_token}`,
         },
     });
-    const googleGetCalendarList = () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const { data } = yield calendarGoogleAPI.get(`/users/me/calendarList`);
-            return data;
-        }
-        catch (err) {
-            throw new Error(err);
-        }
-    });
-    const googleGetCalendarSearchEvent = (calendarId) => __awaiter(void 0, void 0, void 0, function* () {
+    const calendarId = user.email;
+    const googleGetCalendarSearchEvent = (meeting_time) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
         try {
             const { data } = yield calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
                 params: {
                     maxResults: 1,
                 },
             });
-            return data;
+            if (data === null || data === void 0 ? void 0 : data.items) {
+                const findMeeting = (_a = data === null || data === void 0 ? void 0 : data.items) === null || _a === void 0 ? void 0 : _a.find((item) => item.summary === 'Möte med Mersol' &&
+                    (0, dayjs_1.default)(item.start.dateTime).diff((0, dayjs_1.default)(meeting_time).add(2, 'hours')) === 0);
+                return findMeeting;
+            }
+            return data === null || data === void 0 ? void 0 : data.items;
         }
         catch (err) {
             throw new Error(err);
         }
     });
-    const googleDeleteCalendarEvent = (calendarId, eventId) => __awaiter(void 0, void 0, void 0, function* () {
+    const googleDeleteCalendarEvent = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { data } = yield calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
             return data;
@@ -59,7 +58,6 @@ const useGoogle = (user) => __awaiter(void 0, void 0, void 0, function* () {
         }
     });
     return {
-        googleGetCalendarList,
         googleGetCalendarSearchEvent,
         googleDeleteCalendarEvent,
     };
