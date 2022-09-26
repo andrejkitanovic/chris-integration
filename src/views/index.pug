@@ -12,11 +12,12 @@ block content
         div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-type="standard" data-theme="dark")
     script.
         function onSignIn(googleUser) {
-            const profile = googleUser.getBasicProfile();
-            axios.post('/api/webhook', {
-                type: "google",
-                idToken: googleUser.getAuthResponse().id_token,
-                fullName: profile.getName(),
-                email: profile.getEmail()
-            })
+            console.log(googleUser)
+            //- const profile = googleUser.getBasicProfile();
+            //- axios.post('/api/webhook', {
+            //-     type: "google",
+            //-     idToken: googleUser.getAuthResponse().id_token,
+            //-     fullName: profile.getName(),
+            //-     email: profile.getEmail()
+            //- })
         }
