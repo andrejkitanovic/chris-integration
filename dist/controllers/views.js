@@ -8,10 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getHomepage = void 0;
 const googleapis_1 = require("googleapis");
-// import User from 'models/user';
+const user_1 = __importDefault(require("models/user"));
 const getHomepage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const oauth2Client = new googleapis_1.google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, 'https://webhook.mersol.se');
@@ -27,8 +30,8 @@ const getHomepage = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             scope: scopes,
             include_granted_scopes: true,
         });
-        // const users = await User.find();
-        res.render('index', { authorizationUrl });
+        const users = yield user_1.default.find();
+        res.render('index', { users, authorizationUrl });
     }
     catch (err) {
         next(err);

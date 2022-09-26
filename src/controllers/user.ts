@@ -32,7 +32,6 @@ export const postUser: RequestHandler = async (req, res, next) => {
 			grant_type: 'authorization_code',
 			code,
 		});
-		console.log(tokenData)
 
 		const ticket = await oauth.verifyIdToken({
 			idToken: tokenData.id_token,
@@ -40,8 +39,8 @@ export const postUser: RequestHandler = async (req, res, next) => {
 		});
 		const payload = ticket.getPayload();
 
-		if (!payload) throw new Error("Missing payload");
-		if (!tokenData.refresh_token) throw new Error("Missing refresh token");
+		if (!payload) throw new Error('Missing payload');
+		if (!tokenData.refresh_token) throw new Error('Missing refresh token');
 
 		console.log({
 			name: payload.name,

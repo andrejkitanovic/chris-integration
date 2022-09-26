@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { google } from 'googleapis';
-// import User from 'models/user';
+import User from 'models/user';
 
 export const getHomepage: RequestHandler = async (req, res, next) => {
 	try {
@@ -22,9 +22,9 @@ export const getHomepage: RequestHandler = async (req, res, next) => {
 			include_granted_scopes: true,
 		});
 
-		// const users = await User.find();
+		const users = await User.find();
 
-		res.render('index', { authorizationUrl });
+		res.render('index', { users, authorizationUrl });
 	} catch (err) {
 		next(err);
 	}
