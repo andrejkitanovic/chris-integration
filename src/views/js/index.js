@@ -7,17 +7,27 @@ function decodeJwtResponse(token) {
     return JSON.parse(jsonPayload)
 }
 
-function handleCredentialResponse(response) {
-    // decodeJwtResponse() is a custom function defined by you
-    // to decode the credential response.
-    const responsePayload = decodeJwtResponse(response.credential);
-    console.log(responsePayload)
-    console.log("ID: " + responsePayload.sub);
-    console.log('Full Name: ' + responsePayload.name);
-    console.log('Given Name: ' + responsePayload.given_name);
-    console.log('Family Name: ' + responsePayload.family_name);
-    console.log("Image URL: " + responsePayload.picture);
-    console.log("Email: " + responsePayload.email);
+async function handleCredentialResponse(response) {
+    const token = response.credential;
+    const { name, email, sub, exp } = decodeJwtResponse(token);
+
+    const user = {
+        id: sub,
+        name,
+        email,
+        token
+    }
+
+    // eslint-disable-next-line no-undef
+    const refreshToken = await axios.post('https://oauth2.googleapis.com/token', {
+        client_id: "1030380273030-k07lak1kpumrreilpf83jmck25cpnocb.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uri: 'https://webhook.mersol.se',
+        grant_type: 'authorization_code',
+        code: token
+    })
+
+    console.log(refreshToken);
 }
 
 
