@@ -42,8 +42,12 @@ connection(app);
 // import User, { IUser } from 'models/user';
 
 // (async function () {
-// 	const user = (await User.findOne({ email: 'simon@mersol.se' })) as IUser;
+// 	const user = (await User.findOne({ email: 'christian@mersol.se' })) as IUser;
 
-// 	const { googleDeleteCalendarEvent } = await useGoogle(user);
-// 	console.log(await googleDeleteCalendarEvent("2022-09-09T11:00:00"));
+// 	const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
+// 	// console.log(await googleDeleteCalendarEvent("2022-09-27T12:45:00Z"));
+// 	const meeting = await googleGetCalendarSearchEvent("2022-09-27T12:45:00Z");
+// 	await googleDeleteCalendarEvent(meeting.id);
+
+// 	console.log(meeting)
 // })();

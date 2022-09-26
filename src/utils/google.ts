@@ -24,7 +24,8 @@ export const useGoogle = async (user: IUser) => {
 		try {
 			const { data } = await calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
 				params: {
-					maxResults: 1,
+					q: 'Möte med Mersol',
+					timeMin: meeting_time,
 				},
 			});
 
@@ -32,7 +33,7 @@ export const useGoogle = async (user: IUser) => {
 				const findMeeting = data?.items?.find(
 					(item: any) =>
 						item.summary === 'Möte med Mersol' &&
-						dayjs(item.start.dateTime).diff(dayjs(meeting_time).add(2, 'hours')) === 0
+						dayjs(item.start.dateTime).diff(dayjs(meeting_time)) === 0
 				);
 
 				return findMeeting;
