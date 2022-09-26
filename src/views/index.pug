@@ -8,7 +8,6 @@ block content
                     p.my-0 christian@mersol.se
                     span.badge.badge-success Authenticated
 
-        script(src='https://apis.google.com/js/platform.js?onload=onLoad' async defer)
         script(src='https://accounts.google.com/gsi/client' async defer)
         div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="onSignIn")
         div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-theme="dark")
