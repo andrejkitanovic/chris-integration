@@ -45,6 +45,7 @@ export const postUser: RequestHandler = async (req, res, next) => {
 		await User.create({
 			name: payload.name,
 			email: payload.email,
+			clientId: payload.sub,
 			refreshToken: tokenData.refresh_token,
 		});
 
