@@ -43,15 +43,16 @@ const postUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             grant_type: 'authorization_code',
             code,
         });
+        console.log(tokenData);
         const ticket = yield oauth.verifyIdToken({
             idToken: tokenData.id_token,
             audience: process.env.GOOGLE_CLIENT_ID,
         });
         const payload = ticket.getPayload();
         if (!payload)
-            throw new Error();
+            throw new Error("Missing payload");
         if (!tokenData.refresh_token)
-            throw new Error();
+            throw new Error("Missing refresh token");
         console.log({
             name: payload.name,
             email: payload.email,
