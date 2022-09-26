@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = void 0;
+exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -21,6 +21,20 @@ const pipedriveAPI = axios_1.default.create({
         api_token: process.env.PIPEDRIVE_API_KEY,
     },
 });
+// USERS
+const pipedriveSearchUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield pipedriveAPI.get(`/users/find`, {
+        params: {
+            term: email,
+            search_by_email: 1,
+        },
+    });
+    if (data === null || data === void 0 ? void 0 : data.data) {
+        return data.data[0];
+    }
+    return;
+});
+exports.pipedriveSearchUser = pipedriveSearchUser;
 // CONTACTS
 const pipedriveContactFormat = (body) => {
     return {
@@ -140,17 +154,17 @@ const pipedriveActivityFormat = (body) => {
         // public_description: '<string>',
         subject: `Fri konsultation: Mersol / ${body.namn}`,
         type: 'meeting',
-        // user_id: '<integer>',
-        participants: [
-            {
-                person_id: body.creatorId,
-                primary_flag: true,
-            },
-            {
-                person_id: body.creatorId,
-                primary_flag: true,
-            },
-        ],
+        user_id: body.creatorId,
+        // participants: [
+        // 	{
+        // 		person_id: body.creatorId,
+        // 		primary_flag: true,
+        // 	},
+        // 	{
+        // 		person_id: body.creatorId,
+        // 		primary_flag: true,
+        // 	},
+        // ],
         busy_flag: true,
         // attendees: ['<object>', '<object>'],
         done: 0,
