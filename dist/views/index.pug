@@ -1,0 +1,12 @@
+extends layout/layout.pug
+
+block content
+    div.container
+        div.mb-3
+            div.list-group
+                div.list-group-item.d-flex.justify-content-between.align-items-center 
+                    p.my-0 Christian Jebrail
+                        span.ml-2.text-muted (christian@mersol.se)
+                    span.badge.badge-success Authenticated
+
+        a(href=authorizationUrl).btn.btn-primary Authorize
