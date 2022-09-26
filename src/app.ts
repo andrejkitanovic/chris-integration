@@ -15,7 +15,6 @@ moduleAlias.addAliases({
 import express from 'express';
 import cors from 'cors';
 
-// import storage from "helpers/storage";
 import headersMiddleware from 'middlewares/headers';
 import errorMiddleware from 'middlewares/error';
 import connection from 'helpers/connection';
