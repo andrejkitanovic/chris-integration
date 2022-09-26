@@ -1,3 +1,5 @@
+
+
 function decodeJwtResponse(token) {
     let base64Url = token.split('.')[1]
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -7,6 +9,7 @@ function decodeJwtResponse(token) {
     return JSON.parse(jsonPayload)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function handleCredentialResponse(response) {
     const token = response.credential;
     const { name, email, sub, exp } = decodeJwtResponse(token);
@@ -15,19 +18,12 @@ async function handleCredentialResponse(response) {
         id: sub,
         name,
         email,
-        token
+        token,
+        exp
     }
 
     // eslint-disable-next-line no-undef
-    const refreshToken = await axios.post('https://oauth2.googleapis.com/token', {
-        client_id: "1030380273030-k07lak1kpumrreilpf83jmck25cpnocb.apps.googleusercontent.com",
-        client_secret: "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",
-        redirect_uri: 'https://webhook.mersol.se',
-        grant_type: 'authorization_code',
-        code: token
-    })
-
-    console.log(refreshToken);
+    await axios.post(`/api/user`, user);
 }
 
 

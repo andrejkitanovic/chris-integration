@@ -16,3 +16,15 @@ export const getUsers: RequestHandler = async (req, res, next) => {
 		next(err);
 	}
 };
+
+export const postUser: RequestHandler = async (req, res, next) => {
+	try {
+		const { id, name, email, token, exp } = req.body;
+
+		res.json({
+			message: 'Success',
+		});
+	} catch (err) {
+		next(err);
+	}
+};
