@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = void 0;
+exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = void 0;
 const axios_1 = __importDefault(require("axios"));
+const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
     baseURL: 'https://api.pipedrive.com/v1',
     params: {
@@ -125,3 +126,54 @@ const pipedriveDeleteDeal = (dealId) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.pipedriveDeleteDeal = pipedriveDeleteDeal;
 // ACTIVITY
+const pipedriveActivityFormat = (body) => {
+    return {
+        due_date: (0, dayjs_1.default)(body.meeting_time).toDate(),
+        due_time: (0, dayjs_1.default)(body.meeting_time).format('HH:MM'),
+        duration: '00:30',
+        deal_id: body.dealId,
+        // lead_id: '<string>',
+        person_id: body.userId,
+        // org_id: '<integer>',
+        // note: '<string>',
+        location: body.adress,
+        // public_description: '<string>',
+        subject: `Fri konsultation: Mersol / ${body.namn}`,
+        type: 'meeting',
+        // user_id: '<integer>',
+        participants: [
+            {
+                person_id: body.creatorId,
+                primary_flag: true,
+            },
+            {
+                person_id: body.creatorId,
+                primary_flag: true,
+            },
+        ],
+        busy_flag: true,
+        // attendees: ['<object>', '<object>'],
+        done: 0,
+    };
+};
+const pipedriveSearchActivity = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g;
+    const { data } = yield pipedriveAPI.get(`/activities`, {
+        params: {
+            type: 'meeting',
+            user_id: userId,
+            limit: 1,
+        },
+    });
+    if ((_g = (_f = data === null || data === void 0 ? void 0 : data.data) === null || _f === void 0 ? void 0 : _f.items) === null || _g === void 0 ? void 0 : _g.length) {
+        return data.data.items[0].item;
+    }
+    return;
+});
+exports.pipedriveSearchActivity = pipedriveSearchActivity;
+const pipedriveCreateActivity = (activityData) => __awaiter(void 0, void 0, void 0, function* () {
+    const activity = pipedriveActivityFormat(activityData);
+    const { data } = yield pipedriveAPI.post(`/activities`, Object.assign({}, activity));
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveCreateActivity = pipedriveCreateActivity;

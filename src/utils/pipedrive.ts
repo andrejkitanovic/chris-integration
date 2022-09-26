@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AdversusBody } from 'controllers/adversus';
+import dayjs from 'dayjs';
 
 const pipedriveAPI = axios.create({
 	baseURL: 'https://api.pipedrive.com/v1',
@@ -62,6 +63,29 @@ type PipedriveDealType = {
 	d17b936aebb47ff47a952948480a8145b58f1920?: string;
 	cf494370dff95eaf4cfbfbfba800cac258eccbac?: string;
 	'112c9174964820a0c99b152382c2ee0af9f31071'?: string;
+};
+
+type PipedriveActivityType = {
+	due_date: Date;
+	due_time: string;
+	duration: string;
+	deal_id: number;
+	// lead_id: '<string>',
+	person_id: number;
+	// org_id: '<integer>',
+	// note: '<string>',
+	location: string;
+	// public_description: '<string>',
+	subject: string;
+	type: 'meeting';
+	// user_id: '<integer>',
+	participants?: {
+		person_id: number;
+		primary_flag: boolean;
+	}[];
+	busy_flag: boolean;
+	// attendees: ['<object>', '<object>'],
+	done: 0 | 1;
 };
 
 // CONTACTS
@@ -189,3 +213,62 @@ export const pipedriveDeleteDeal = async (dealId: string) => {
 };
 
 // ACTIVITY
+
+const pipedriveActivityFormat = (
+	body: AdversusBody & { dealId: number; creatorId: number; userId: number }
+): PipedriveActivityType => {
+	return {
+		due_date: dayjs(body.meeting_time).toDate(),
+		due_time: dayjs(body.meeting_time).format('HH:MM'),
+		duration: '00:30',
+		deal_id: body.dealId,
+		// lead_id: '<string>',
+		person_id: body.userId,
+		// org_id: '<integer>',
+		// note: '<string>',
+		location: body.adress,
+		// public_description: '<string>',
+		subject: `Fri konsultation: Mersol / ${body.namn}`,
+		type: 'meeting',
+		// user_id: '<integer>',
+		participants: [
+			{
+				person_id: body.creatorId,
+				primary_flag: true,
+			},
+			{
+				person_id: body.creatorId,
+				primary_flag: true,
+			},
+		],
+		busy_flag: true,
+		// attendees: ['<object>', '<object>'],
+		done: 0,
+	};
+};
+
+export const pipedriveSearchActivity = async (userId: string) => {
+	const { data } = await pipedriveAPI.get(`/activities`, {
+		params: {
+			type: 'meeting',
+			user_id: userId,
+			limit: 1,
+		},
+	});
+
+	if (data?.data?.items?.length) {
+		return data.data.items[0].item;
+	}
+	return;
+};
+
+export const pipedriveCreateActivity = async (
+	activityData: AdversusBody & { dealId: number; creatorId: number; userId: number }
+) => {
+	const activity = pipedriveActivityFormat(activityData);
+	const { data } = await pipedriveAPI.post(`/activities`, {
+		...activity,
+	});
+
+	return data?.data;
+};

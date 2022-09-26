@@ -22,13 +22,14 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
         const requestBody = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body) });
         // [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Create
+        const pipedriveCreator = yield (0, pipedrive_1.pipedriveSearchContact)(requestBody.user_email);
         // [PIPEDRIVE][CONTACT] Find -> T: Use | F: Create
         let pipedriveContact = yield (0, pipedrive_1.pipedriveSearchContact)(requestBody.epost);
         if (!pipedriveContact) {
             pipedriveContact = yield (0, pipedrive_1.pipedriveCreateContact)(requestBody);
         }
         // [PIPEDRIVE][DEAL] Create
-        yield (0, pipedrive_1.pipedriveCreateDeal)(Object.assign(Object.assign({}, requestBody), { pipedriveContactId: pipedriveContact === null || pipedriveContact === void 0 ? void 0 : pipedriveContact.id }));
+        const deal = yield (0, pipedrive_1.pipedriveCreateDeal)(Object.assign(Object.assign({}, requestBody), { pipedriveContactId: pipedriveContact === null || pipedriveContact === void 0 ? void 0 : pipedriveContact.id }));
         // [GOOGLE][MEETING] Find -> T: Delete | F: Pass
         const user = yield user_1.default.findOne({ email: requestBody.user_email });
         if (user) {
@@ -39,6 +40,7 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
             }
         }
         // [PIPEDRIVE][ACTIVITY] Create Meeting
+        yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: deal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
         res.json({
             message: 'Success',
         });
