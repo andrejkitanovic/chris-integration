@@ -7,7 +7,9 @@ block content
                 div.list-group-item.d-flex.justify-content-between.align-items-center 
                     p.my-0 christian@mersol.se
                     span.badge.badge-success Authenticated
-        div.g-signin2.ml-1.text-uppercase(data-onsuccess="onSignIn" data-theme="dark")
+        script(src='https://accounts.google.com/gsi/client' async defer)
+        div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="onSignIn")
+        div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-type="standard" data-theme="dark")
     script.
         function onSignIn(googleUser) {
             const profile = googleUser.getBasicProfile();
