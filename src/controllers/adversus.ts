@@ -9,6 +9,7 @@ import {
 	pipedriveUpdateContact,
 	pipedriveSearchContact,
 	pipedriveCreateActivity,
+	pipedriveSearchUser,
 } from 'utils/pipedrive';
 import User from 'models/user';
 import { useGoogle } from 'utils/google';
@@ -45,8 +46,8 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		const requestBody: AdversusBody = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
 
-		// [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Create
-		const pipedriveCreator = await pipedriveSearchContact(requestBody.user_email);
+		// [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Pass
+		const pipedriveCreator = await pipedriveSearchUser(requestBody.user_email);
 
 		// [PIPEDRIVE][CONTACT] Find -> T: Use | F: Create
 		let pipedriveContact = await pipedriveSearchContact(requestBody.epost);
@@ -71,12 +72,14 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		}
 
 		// [PIPEDRIVE][ACTIVITY] Create Meeting
-		await pipedriveCreateActivity({
-			...requestBody,
-			dealId: deal.id,
-			creatorId: pipedriveCreator.id,
-			userId: pipedriveContact.id,
-		});
+		if (deal && pipedriveCreator && pipedriveContact) {
+			await pipedriveCreateActivity({
+				...requestBody,
+				dealId: deal.id,
+				creatorId: pipedriveCreator.id,
+				userId: pipedriveContact.id,
+			});
+		}
 
 		res.json({
 			message: 'Success',

@@ -78,14 +78,30 @@ type PipedriveActivityType = {
 	// public_description: '<string>',
 	subject: string;
 	type: 'meeting';
-	// user_id: '<integer>',
-	participants?: {
-		person_id: number;
-		primary_flag: boolean;
-	}[];
+	user_id: number;
+	// participants?: {
+	// 	person_id: number;
+	// 	primary_flag: boolean;
+	// }[];
 	busy_flag: boolean;
 	// attendees: ['<object>', '<object>'],
 	done: 0 | 1;
+};
+
+// USERS
+
+export const pipedriveSearchUser = async (email: string) => {
+	const { data } = await pipedriveAPI.get(`/users/find`, {
+		params: {
+			term: email,
+			search_by_email: 1,
+		},
+	});
+
+	if (data?.data) {
+		return data.data[0];
+	}
+	return;
 };
 
 // CONTACTS
@@ -230,17 +246,17 @@ const pipedriveActivityFormat = (
 		// public_description: '<string>',
 		subject: `Fri konsultation: Mersol / ${body.namn}`,
 		type: 'meeting',
-		// user_id: '<integer>',
-		participants: [
-			{
-				person_id: body.creatorId,
-				primary_flag: true,
-			},
-			{
-				person_id: body.creatorId,
-				primary_flag: true,
-			},
-		],
+		user_id: body.creatorId,
+		// participants: [
+		// 	{
+		// 		person_id: body.creatorId,
+		// 		primary_flag: true,
+		// 	},
+		// 	{
+		// 		person_id: body.creatorId,
+		// 		primary_flag: true,
+		// 	},
+		// ],
 		busy_flag: true,
 		// attendees: ['<object>', '<object>'],
 		done: 0,
