@@ -28,7 +28,7 @@ export const postUser: RequestHandler = async (req, res, next) => {
 		const { data: tokenData } = await axios.post('https://oauth2.googleapis.com/token', {
 			client_id: process.env.GOOGLE_CLIENT_ID,
 			client_secret: process.env.GOOGLE_CLIENT_SECRET,
-			redirect_uri: 'http://localhost:8080',
+			redirect_uri: 'https://webhook.mersol.se',
 			grant_type: 'authorization_code',
 			code,
 		});
