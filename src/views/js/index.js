@@ -1,24 +1,25 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function onLoad() {
-    // eslint-disable-next-line no-undef
-    gapi.load('auth2,signin2', function () {
-        // eslint-disable-next-line no-undef
-        var auth2 = gapi.auth2.init();
-        auth2.then(function () {
-            // Current values
-            var isSignedIn = auth2.isSignedIn.get();
-            var currentUser = auth2.currentUser.get();
-
-            if (!isSignedIn) {
-                // Rendering g-signin2 button.
-                // eslint-disable-next-line no-undef
-                gapi.signin2.render('google-signin-button', {
-                    'onsuccess': 'onSignIn'
-                });
-            }
-        });
-    });
+function decodeJwtResponse(token) {
+    let base64Url = token.split('.')[1]
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload)
 }
+
+function handleCredentialResponse(response) {
+    // decodeJwtResponse() is a custom function defined by you
+    // to decode the credential response.
+    const responsePayload = decodeJwtResponse(response.credential);
+    console.log(responsePayload)
+    console.log("ID: " + responsePayload.sub);
+    console.log('Full Name: ' + responsePayload.name);
+    console.log('Given Name: ' + responsePayload.given_name);
+    console.log('Family Name: ' + responsePayload.family_name);
+    console.log("Image URL: " + responsePayload.picture);
+    console.log("Email: " + responsePayload.email);
+}
+
 
 // Create cookie
 function setCookie(cname, cvalue, exdays) {
