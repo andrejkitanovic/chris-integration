@@ -1,3 +1,25 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function onLoad() {
+    // eslint-disable-next-line no-undef
+    gapi.load('auth2,signin2', function () {
+        // eslint-disable-next-line no-undef
+        var auth2 = gapi.auth2.init();
+        auth2.then(function () {
+            // Current values
+            var isSignedIn = auth2.isSignedIn.get();
+            var currentUser = auth2.currentUser.get();
+
+            if (!isSignedIn) {
+                // Rendering g-signin2 button.
+                // eslint-disable-next-line no-undef
+                gapi.signin2.render('google-signin-button', {
+                    'onsuccess': 'onSignIn'
+                });
+            }
+        });
+    });
+}
+
 // Create cookie
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();

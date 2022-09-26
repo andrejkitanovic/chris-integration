@@ -7,12 +7,15 @@ block content
                 div.list-group-item.d-flex.justify-content-between.align-items-center 
                     p.my-0 christian@mersol.se
                     span.badge.badge-success Authenticated
+
+        script(src='https://apis.google.com/js/platform.js?onload=onLoad' async defer)
         script(src='https://accounts.google.com/gsi/client' async defer)
         div(id="g_id_onload" data-client_id=`${process.env.GOOGLE_CLIENT_ID}` data-callback="onSignIn")
-        div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-type="standard" data-theme="dark")
+        div.g_id_signin.ml-1.text-uppercase(data-onsuccess="onSignIn" data-theme="dark")
     script.
         function onSignIn(googleUser) {
-            console.log(googleUser)
+            console.log(googleUser);
+            console.log(googleUser.getBasicProfile())
             //- const profile = googleUser.getBasicProfile();
             //- axios.post('/api/webhook', {
             //-     type: "google",
