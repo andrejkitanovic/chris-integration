@@ -1,0 +1,7 @@
+#cookieNotice {
+	position: fixed;
+	bottom: 0;
+	padding: 50px;
+	width: 100%;
+	border-top: 1px solid black;
+}
