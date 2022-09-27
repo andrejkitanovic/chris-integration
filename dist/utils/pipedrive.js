@@ -144,11 +144,9 @@ const pipedriveActivityFormat = (body) => {
     return {
         due_date: (0, dayjs_1.default)(body.meeting_time).format('YYYY-MM-DD'),
         due_time: (0, dayjs_1.default)(body.meeting_time).format('HH:mm'),
-        duration: '00:30',
+        duration: '01:00',
         deal_id: body.dealId,
-        // lead_id: '<string>',
         person_id: body.userId,
-        // org_id: '<integer>',
         // note: `Fri konsultation: Mersol / ${body.namn}`,
         location: body.adress,
         // public_description:  `Fri konsultation: Mersol / ${body.namn}`,
@@ -165,15 +163,7 @@ const pipedriveActivityFormat = (body) => {
         // 		primary_flag: true,
         // 	},
         // ],
-        busy_flag: true,
-        attendees: [
-            {
-                email_address: body.epost,
-            },
-            {
-                email_address: body.user_email,
-            },
-        ],
+        // busy_flag: true,
         done: 0,
     };
 };

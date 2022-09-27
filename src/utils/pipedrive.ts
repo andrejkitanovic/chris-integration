@@ -83,7 +83,7 @@ type PipedriveActivityType = {
 	// 	person_id: number;
 	// 	primary_flag: boolean;
 	// }[];
-	busy_flag: boolean;
+	busy_flag?: boolean;
 	attendees?: {
 		email_address: string;
 	}[];
@@ -238,11 +238,9 @@ const pipedriveActivityFormat = (
 	return {
 		due_date: dayjs(body.meeting_time).format('YYYY-MM-DD'),
 		due_time: dayjs(body.meeting_time).format('HH:mm'),
-		duration: '00:30',
+		duration: '01:00',
 		deal_id: body.dealId,
-		// lead_id: '<string>',
 		person_id: body.userId,
-		// org_id: '<integer>',
 		// note: `Fri konsultation: Mersol / ${body.namn}`,
 		location: body.adress,
 		// public_description:  `Fri konsultation: Mersol / ${body.namn}`,
@@ -259,15 +257,7 @@ const pipedriveActivityFormat = (
 		// 		primary_flag: true,
 		// 	},
 		// ],
-		busy_flag: true,
-		// attendees: [
-		// 	{
-		// 		email_address: body.epost,
-		// 	},
-		// 	{
-		// 		email_address: body.user_email,
-		// 	},
-		// ],
+		// busy_flag: true,
 		done: 0,
 	};
 };
