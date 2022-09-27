@@ -79,10 +79,10 @@ type PipedriveActivityType = {
 	subject: string;
 	type: 'meeting';
 	user_id: number;
-	// participants?: {
-	// 	person_id: number;
-	// 	primary_flag: boolean;
-	// }[];
+	participants?: {
+		person_id: number;
+		primary_flag: boolean;
+	}[];
 	busy_flag?: boolean;
 	attendees?: {
 		email_address: string;
@@ -247,16 +247,16 @@ const pipedriveActivityFormat = (
 		subject: `Fri konsultation: Mersol / ${body.namn}`,
 		type: 'meeting',
 		user_id: body.creatorId,
-		// participants: [
-		// 	{
-		// 		person_id: body.creatorId,
-		// 		primary_flag: true,
-		// 	},
-		// 	{
-		// 		person_id: body.creatorId,
-		// 		primary_flag: true,
-		// 	},
-		// ],
+		participants: [
+			{
+				person_id: body.creatorId,
+				primary_flag: true,
+			},
+			{
+				person_id: body.userId,
+				primary_flag: true,
+			},
+		],
 		busy_flag: true,
 		done: 0,
 	};
