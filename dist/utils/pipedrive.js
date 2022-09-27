@@ -142,7 +142,7 @@ exports.pipedriveDeleteDeal = pipedriveDeleteDeal;
 // ACTIVITY
 const pipedriveActivityFormat = (body) => {
     return {
-        due_date: (0, dayjs_1.default)(body.meeting_time).toDate(),
+        due_date: (0, dayjs_1.default)(body.meeting_time).format('YYYY-MM-DD'),
         due_time: (0, dayjs_1.default)(body.meeting_time).format('HH:MM'),
         duration: '00:30',
         deal_id: body.dealId,
@@ -166,7 +166,14 @@ const pipedriveActivityFormat = (body) => {
         // 	},
         // ],
         busy_flag: true,
-        // attendees: ['<object>', '<object>'],
+        attendees: [
+            {
+                email_address: body.epost,
+            },
+            {
+                email_address: body.user_email,
+            },
+        ],
         done: 0,
     };
 };

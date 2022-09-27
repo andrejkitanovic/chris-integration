@@ -66,7 +66,7 @@ type PipedriveDealType = {
 };
 
 type PipedriveActivityType = {
-	due_date: Date;
+	due_date: string;
 	due_time: string;
 	duration: string;
 	deal_id: number;
@@ -84,7 +84,9 @@ type PipedriveActivityType = {
 	// 	primary_flag: boolean;
 	// }[];
 	busy_flag: boolean;
-	// attendees: ['<object>', '<object>'],
+	attendees?: {
+		email_address: string;
+	}[];
 	done: 0 | 1;
 };
 
@@ -234,7 +236,7 @@ const pipedriveActivityFormat = (
 	body: AdversusBody & { dealId: number; creatorId: number; userId: number }
 ): PipedriveActivityType => {
 	return {
-		due_date: dayjs(body.meeting_time).toDate(),
+		due_date: dayjs(body.meeting_time).format('YYYY-MM-DD'),
 		due_time: dayjs(body.meeting_time).format('HH:MM'),
 		duration: '00:30',
 		deal_id: body.dealId,
@@ -258,7 +260,14 @@ const pipedriveActivityFormat = (
 		// 	},
 		// ],
 		busy_flag: true,
-		// attendees: ['<object>', '<object>'],
+		attendees: [
+			{
+				email_address: body.epost,
+			},
+			{
+				email_address: body.user_email,
+			},
+		],
 		done: 0,
 	};
 };

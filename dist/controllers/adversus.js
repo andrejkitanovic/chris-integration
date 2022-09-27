@@ -29,7 +29,7 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
             pipedriveContact = yield (0, pipedrive_1.pipedriveCreateContact)(requestBody);
         }
         // [PIPEDRIVE][DEAL] Create
-        const deal = yield (0, pipedrive_1.pipedriveCreateDeal)(Object.assign(Object.assign({}, requestBody), { pipedriveContactId: pipedriveContact === null || pipedriveContact === void 0 ? void 0 : pipedriveContact.id }));
+        const pipedriveDeal = yield (0, pipedrive_1.pipedriveCreateDeal)(Object.assign(Object.assign({}, requestBody), { pipedriveContactId: pipedriveContact === null || pipedriveContact === void 0 ? void 0 : pipedriveContact.id }));
         // [GOOGLE][MEETING] Find -> T: Delete | F: Pass
         const user = yield user_1.default.findOne({ email: requestBody.user_email });
         if (user) {
@@ -40,8 +40,8 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
             }
         }
         // [PIPEDRIVE][ACTIVITY] Create Meeting
-        if (deal && pipedriveCreator && pipedriveContact) {
-            yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: deal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
+        if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
+            yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
         }
         res.json({
             message: 'Success',
@@ -57,6 +57,8 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const requestBody = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body) });
+        // [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Pass
+        const pipedriveCreator = yield (0, pipedrive_1.pipedriveSearchUser)(requestBody.user_email);
         // [PIPEDRIVE][CONTACT] Find -> T: Update | F: Pass
         let pipedriveContact = yield (0, pipedrive_1.pipedriveSearchContact)(requestBody.epost);
         if (pipedriveContact) {
@@ -77,6 +79,9 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
             }
         }
         // [PIPEDRIVE][ACTIVITY] Update Meeting
+        if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
+            yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
+        }
         res.json({
             message: 'Success',
         });

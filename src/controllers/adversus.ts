@@ -57,7 +57,7 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		}
 
 		// [PIPEDRIVE][DEAL] Create
-		const deal = await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
+		const pipedriveDeal = await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
 
 		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
 		const user = await User.findOne({ email: requestBody.user_email });
@@ -72,10 +72,10 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		}
 
 		// [PIPEDRIVE][ACTIVITY] Create Meeting
-		if (deal && pipedriveCreator && pipedriveContact) {
+		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
 			await pipedriveCreateActivity({
 				...requestBody,
-				dealId: deal.id,
+				dealId: pipedriveDeal.id,
 				creatorId: pipedriveCreator.id,
 				userId: pipedriveContact.id,
 			});
@@ -94,6 +94,9 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 	try {
 		const requestBody: AdversusBody = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
+
+		// [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Pass
+		const pipedriveCreator = await pipedriveSearchUser(requestBody.user_email);
 
 		// [PIPEDRIVE][CONTACT] Find -> T: Update | F: Pass
 		let pipedriveContact = await pipedriveSearchContact(requestBody.epost);
@@ -124,6 +127,14 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 		}
 
 		// [PIPEDRIVE][ACTIVITY] Update Meeting
+		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
+			await pipedriveCreateActivity({
+				...requestBody,
+				dealId: pipedriveDeal.id,
+				creatorId: pipedriveCreator.id,
+				userId: pipedriveContact.id,
+			});
+		}
 
 		res.json({
 			message: 'Success',
