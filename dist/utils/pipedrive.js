@@ -143,15 +143,15 @@ exports.pipedriveDeleteDeal = pipedriveDeleteDeal;
 const pipedriveActivityFormat = (body) => {
     return {
         due_date: (0, dayjs_1.default)(body.meeting_time).format('YYYY-MM-DD'),
-        due_time: (0, dayjs_1.default)(body.meeting_time).format('HH:MM'),
+        due_time: (0, dayjs_1.default)(body.meeting_time).format('HH:mm'),
         duration: '00:30',
         deal_id: body.dealId,
         // lead_id: '<string>',
         person_id: body.userId,
         // org_id: '<integer>',
-        // note: '<string>',
+        // note: `Fri konsultation: Mersol / ${body.namn}`,
         location: body.adress,
-        // public_description: '<string>',
+        // public_description:  `Fri konsultation: Mersol / ${body.namn}`,
         subject: `Fri konsultation: Mersol / ${body.namn}`,
         type: 'meeting',
         user_id: body.creatorId,
