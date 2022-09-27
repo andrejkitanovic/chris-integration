@@ -73,9 +73,9 @@ type PipedriveActivityType = {
 	// lead_id: '<string>',
 	person_id: number;
 	// org_id: '<integer>',
-	// note: '<string>',
+	note?: string;
 	location: string;
-	// public_description: '<string>',
+	public_description?: string;
 	subject: string;
 	type: 'meeting';
 	user_id: number;
@@ -237,15 +237,15 @@ const pipedriveActivityFormat = (
 ): PipedriveActivityType => {
 	return {
 		due_date: dayjs(body.meeting_time).format('YYYY-MM-DD'),
-		due_time: dayjs(body.meeting_time).format('HH:MM'),
+		due_time: dayjs(body.meeting_time).format('HH:mm'),
 		duration: '00:30',
 		deal_id: body.dealId,
 		// lead_id: '<string>',
 		person_id: body.userId,
 		// org_id: '<integer>',
-		// note: '<string>',
+		// note: `Fri konsultation: Mersol / ${body.namn}`,
 		location: body.adress,
-		// public_description: '<string>',
+		// public_description:  `Fri konsultation: Mersol / ${body.namn}`,
 		subject: `Fri konsultation: Mersol / ${body.namn}`,
 		type: 'meeting',
 		user_id: body.creatorId,
