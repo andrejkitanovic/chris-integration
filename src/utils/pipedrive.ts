@@ -260,14 +260,14 @@ const pipedriveActivityFormat = (
 		// 	},
 		// ],
 		busy_flag: true,
-		attendees: [
-			{
-				email_address: body.epost,
-			},
-			{
-				email_address: body.user_email,
-			},
-		],
+		// attendees: [
+		// 	{
+		// 		email_address: body.epost,
+		// 	},
+		// 	{
+		// 		email_address: body.user_email,
+		// 	},
+		// ],
 		done: 0,
 	};
 };
