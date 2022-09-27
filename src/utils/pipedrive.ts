@@ -261,9 +261,9 @@ const pipedriveActivityFormat = (
 			{
 				email_address: body.epost,
 			},
-			{
-				email_address: body.user_email,
-			},
+			// {
+			// 	email_address: body.user_email,
+			// },
 		],
 		busy_flag: true,
 		done: 0,
