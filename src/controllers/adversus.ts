@@ -128,12 +128,12 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][ACTIVITY] Update Meeting
 		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-			await pipedriveCreateActivity({
-				...requestBody,
-				dealId: pipedriveDeal.id,
-				creatorId: pipedriveCreator.id,
-				userId: pipedriveContact.id,
-			});
+			// await pipdriveUpdateActivity({
+			// 	...requestBody,
+			// 	dealId: pipedriveDeal.id,
+			// 	creatorId: pipedriveCreator.id,
+			// 	userId: pipedriveContact.id,
+			// });
 		}
 
 		res.json({
@@ -149,13 +149,28 @@ export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) 
 		const requestBody: AdversusBody = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(req.body) });
 
-		// [PIPEDRIVE][ACTIVITY] Delete Meeting
+		// [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Pass
+		const pipedriveCreator = await pipedriveSearchUser(requestBody.user_email);
 
-		// [PIPEDRIVE][DEAL] Find -> T: Delete | F: Pass
+		// [PIPEDRIVE][DEAL] Find
 		const pipedriveDeal = await pipedriveSearchDeal(
 			`${requestBody.namn} / ${requestBody.adress} (${requestBody.stad})`
 		);
 
+		// [PIPEDRIVE][CONTACT] Find
+		const pipedriveContact = await pipedriveSearchContact(requestBody.epost);
+
+		// [PIPEDRIVE][ACTIVITY] Delete Meeting
+		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
+			// await pipedriveDeleteActivity({
+			// 	...requestBody,
+			// 	dealId: pipedriveDeal.id,
+			// 	creatorId: pipedriveCreator.id,
+			// 	userId: pipedriveContact.id,
+			// });
+		}
+
+		// [PIPEDRIVE][DEAL] Founded -> T: Delete | F: Pass
 		if (pipedriveDeal) {
 			await pipedriveDeleteDeal(pipedriveDeal?.id);
 		}

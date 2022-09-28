@@ -247,23 +247,10 @@ const pipedriveActivityFormat = (
 		subject: `Fri konsultation: Mersol / ${body.namn}`,
 		type: 'meeting',
 		user_id: body.creatorId,
-		// participants: [
-		// 	{
-		// 		person_id: body.creatorId,
-		// 		primary_flag: true,
-		// 	},
-		// 	{
-		// 		person_id: body.userId,
-		// 		primary_flag: true,
-		// 	},
-		// ],
 		attendees: [
 			{
 				email_address: body.epost,
 			},
-			// {
-			// 	email_address: body.user_email,
-			// },
 		],
 		busy_flag: true,
 		done: 0,

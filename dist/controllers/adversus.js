@@ -80,7 +80,12 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
         }
         // [PIPEDRIVE][ACTIVITY] Update Meeting
         if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-            yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
+            // await pipdriveUpdateActivity({
+            // 	...requestBody,
+            // 	dealId: pipedriveDeal.id,
+            // 	creatorId: pipedriveCreator.id,
+            // 	userId: pipedriveContact.id,
+            // });
         }
         res.json({
             message: 'Success',
@@ -95,9 +100,22 @@ const postWebhookBookingDeleted = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         const requestBody = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body) });
-        // [PIPEDRIVE][ACTIVITY] Delete Meeting
-        // [PIPEDRIVE][DEAL] Find -> T: Delete | F: Pass
+        // [PIPEDRIVE][CONTACT] Creartor Find -> T: Use | F: Pass
+        const pipedriveCreator = yield (0, pipedrive_1.pipedriveSearchUser)(requestBody.user_email);
+        // [PIPEDRIVE][DEAL] Find
         const pipedriveDeal = yield (0, pipedrive_1.pipedriveSearchDeal)(`${requestBody.namn} / ${requestBody.adress} (${requestBody.stad})`);
+        // [PIPEDRIVE][CONTACT] Find
+        const pipedriveContact = yield (0, pipedrive_1.pipedriveSearchContact)(requestBody.epost);
+        // [PIPEDRIVE][ACTIVITY] Delete Meeting
+        if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
+            // await pipedriveDeleteActivity({
+            // 	...requestBody,
+            // 	dealId: pipedriveDeal.id,
+            // 	creatorId: pipedriveCreator.id,
+            // 	userId: pipedriveContact.id,
+            // });
+        }
+        // [PIPEDRIVE][DEAL] Founded -> T: Delete | F: Pass
         if (pipedriveDeal) {
             yield (0, pipedrive_1.pipedriveDeleteDeal)(pipedriveDeal === null || pipedriveDeal === void 0 ? void 0 : pipedriveDeal.id);
         }
