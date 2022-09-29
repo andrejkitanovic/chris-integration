@@ -37,17 +37,3 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
-
-// import { useGoogle } from 'utils/google';
-// import User, { IUser } from 'models/user';
-
-// (async function () {
-// 	const user = (await User.findOne({ email: 'christian@mersol.se' })) as IUser;
-
-// 	const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
-// 	// console.log(await googleDeleteCalendarEvent("2022-09-27T12:45:00Z"));
-// 	const meeting = await googleGetCalendarSearchEvent("2022-09-27T12:45:00Z");
-// 	await googleDeleteCalendarEvent(meeting.id);
-
-// 	console.log(meeting)
-// })();

@@ -266,8 +266,8 @@ export const pipedriveSearchActivity = async (userId: string) => {
 		},
 	});
 
-	if (data?.data?.items?.length) {
-		return data.data.items[0].item;
+	if (data?.data?.length) {
+		return data.data[0];
 	}
 	return;
 };
@@ -279,6 +279,24 @@ export const pipedriveCreateActivity = async (
 	const { data } = await pipedriveAPI.post(`/activities`, {
 		...activity,
 	});
+
+	return data?.data;
+};
+
+export const pipedriveUpdateActivitiy = async (
+	activityId: string,
+	activityData: AdversusBody & { dealId: number; creatorId: number; userId: number }
+) => {
+	const activity = pipedriveActivityFormat(activityData);
+	const { data } = await pipedriveAPI.put(`/activities/${activityId}`, {
+		...activity,
+	});
+
+	return data?.data;
+};
+
+export const pipedriveDeleteActivitiy = async (activityId: string) => {
+	const { data } = await pipedriveAPI.delete(`/activities/${activityId}`);
 
 	return data?.data;
 };

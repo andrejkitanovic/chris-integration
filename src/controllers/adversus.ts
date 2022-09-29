@@ -10,6 +10,9 @@ import {
 	pipedriveSearchContact,
 	pipedriveCreateActivity,
 	pipedriveSearchUser,
+	pipedriveSearchActivity,
+	pipedriveDeleteActivitiy,
+	pipedriveUpdateActivitiy,
 } from 'utils/pipedrive';
 import User from 'models/user';
 import { useGoogle } from 'utils/google';
@@ -128,12 +131,14 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][ACTIVITY] Update Meeting
 		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-			// await pipdriveUpdateActivity({
-			// 	...requestBody,
-			// 	dealId: pipedriveDeal.id,
-			// 	creatorId: pipedriveCreator.id,
-			// 	userId: pipedriveContact.id,
-			// });
+			const pipedriveActivity = await pipedriveSearchActivity(pipedriveContact.id);
+
+			await pipedriveUpdateActivitiy(pipedriveActivity.id, {
+				...requestBody,
+				dealId: pipedriveDeal.id,
+				creatorId: pipedriveCreator.id,
+				userId: pipedriveContact.id,
+			});
 		}
 
 		res.json({
@@ -162,12 +167,9 @@ export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][ACTIVITY] Delete Meeting
 		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-			// await pipedriveDeleteActivity({
-			// 	...requestBody,
-			// 	dealId: pipedriveDeal.id,
-			// 	creatorId: pipedriveCreator.id,
-			// 	userId: pipedriveContact.id,
-			// });
+			const pipedriveActivity = await pipedriveSearchActivity(pipedriveContact.id);
+
+			await pipedriveDeleteActivitiy(pipedriveActivity?.id);
 		}
 
 		// [PIPEDRIVE][DEAL] Founded -> T: Delete | F: Pass
