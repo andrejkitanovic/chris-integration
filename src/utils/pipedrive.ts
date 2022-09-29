@@ -36,7 +36,7 @@ type PipedriveContactType = {
 	f74cb56204d9608f9b8d4692ab034a135ae7389a_formatted_address?: string; // address
 };
 
-type PipedriveDealType = {
+export type PipedriveDealType = {
 	title: string;
 	value?: string;
 	currency?: string;
@@ -63,6 +63,8 @@ type PipedriveDealType = {
 	d17b936aebb47ff47a952948480a8145b58f1920?: string;
 	cf494370dff95eaf4cfbfbfba800cac258eccbac?: string;
 	'112c9174964820a0c99b152382c2ee0af9f31071'?: string;
+
+	next_activity?: PipedriveActivityType;
 };
 
 type PipedriveActivityType = {
@@ -187,6 +189,15 @@ const pipedriveDealFormat = (body: AdversusBody & { pipedriveContactId?: number 
 		cf494370dff95eaf4cfbfbfba800cac258eccbac: '',
 		'112c9174964820a0c99b152382c2ee0af9f31071': '',
 	};
+};
+
+export const pipedriveGetDealById = async (dealId: number) => {
+	const { data } = await pipedriveAPI.get(`/deals/${dealId}`);
+
+	if (data?.data) {
+		return data.data;
+	}
+	return;
 };
 
 export const pipedriveSearchDeal = async (name: string) => {

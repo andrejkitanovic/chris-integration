@@ -1,4 +1,6 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { PipedriveDealType } from './pipedrive';
 
 const trelloAPI = axios.create({
 	baseURL: 'https://api.trello.com',
@@ -23,6 +25,16 @@ type TrelloCardType = {
 	keepFromSource?: string;
 };
 
+const trelloCardFormat = (body: PipedriveDealType): TrelloCardType => {
+	return {
+		name: body.title,
+		desc: body.next_activity?.public_description ?? '',
+		due: body.next_activity
+			? dayjs(`${body.next_activity?.due_date} ${body.next_activity?.due_time}`).subtract(1, 'day').toDate()
+			: null,
+	};
+};
+
 const trelloGetListCards = async () => {
 	const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
 	return data;
@@ -33,13 +45,15 @@ export const trelloSearchCard = async (name: string) => {
 	return cards.find((card: TrelloCardType) => card.name === name);
 };
 
-export const trelloCreateCard = async (cardData: TrelloCardType) => {
-	const { data } = await trelloAPI.post(`/1/cards`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
+export const trelloCreateCard = async (cardData: PipedriveDealType) => {
+	const card = trelloCardFormat(cardData);
+	const { data } = await trelloAPI.post(`/1/cards`, { idList: process.env.TRELLO_LIST_ID, ...card });
 	return data;
 };
 
-export const trelloUpdateCard = async (cardId: string, cardData: TrelloCardType) => {
-	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
+export const trelloUpdateCard = async (cardId: string, cardData: PipedriveDealType) => {
+	const card = trelloCardFormat(cardData);
+	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...card });
 	return data;
 };
 

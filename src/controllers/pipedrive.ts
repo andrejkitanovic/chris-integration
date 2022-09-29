@@ -1,8 +1,9 @@
 import { RequestHandler } from 'express';
 import { writeInFile } from 'helpers/writeInFile';
-import { trelloDeleteCard, trelloSearchCard, trelloUpdateCard } from 'utils/trello';
+import { pipedriveGetDealById } from 'utils/pipedrive';
+import { trelloSearchCard, trelloUpdateCard } from 'utils/trello';
 
-type PipedriveActivityBody = {
+export type PipedriveActivityBody = {
 	// last_notification_time: null;
 	// location_street_number: null;
 	type_name: 'Meeting';
@@ -73,11 +74,14 @@ export const postWebhookActivityUpdated: RequestHandler = async (req, res, next)
 		const { current }: { current: PipedriveActivityBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
 
+		// [PIPEDRIVE][DEAL] Find
+		const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
+
 		// [TRELLO][CARD] Find -> T: Update | F: Pass
-		const trelloCard = await trelloSearchCard(current.deal_title);
+		const trelloCard = await trelloSearchCard(pipedriveDeal.title);
 
 		if (trelloCard) {
-			// await trelloUpdateCard(trelloCard.id, {});
+			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
 		}
 
 		res.json({
@@ -94,11 +98,14 @@ export const postWebhookActivityDeleted: RequestHandler = async (req, res, next)
 		const { current }: { current: PipedriveActivityBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
 
+		// [PIPEDRIVE][DEAL] Find
+		const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
+
 		// [TRELLO][CARD] Find -> T: Delete | F: Pass
-		const trelloCard = await trelloSearchCard(current.deal_title);
+		const trelloCard = await trelloSearchCard(pipedriveDeal.title);
 
 		if (trelloCard) {
-			// await trelloDeleteCard(trelloCard.id);
+			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
 		}
 
 		res.json({
