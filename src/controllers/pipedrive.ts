@@ -98,7 +98,7 @@ export const postWebhookActivityDeleted: RequestHandler = async (req, res, next)
 		const trelloCard = await trelloSearchCard(current.deal_title);
 
 		if (trelloCard) {
-			await trelloDeleteCard(trelloCard.id);
+			// await trelloDeleteCard(trelloCard.id);
 		}
 
 		res.json({
