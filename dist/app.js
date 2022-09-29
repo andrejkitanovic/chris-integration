@@ -35,13 +35,7 @@ app.use('/logs/errors', express_1.default.static('logs/error.log'));
 (0, routes_1.default)(app);
 app.use(error_1.default);
 (0, connection_1.default)(app);
-// import { useGoogle } from 'utils/google';
-// import User, { IUser } from 'models/user';
-// (async function () {
-// 	const user = (await User.findOne({ email: 'christian@mersol.se' })) as IUser;
-// 	const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
-// 	// console.log(await googleDeleteCalendarEvent("2022-09-27T12:45:00Z"));
-// 	const meeting = await googleGetCalendarSearchEvent("2022-09-27T12:45:00Z");
-// 	await googleDeleteCalendarEvent(meeting.id);
-// 	console.log(meeting)
-// })();
+// import { trelloSearchCard } from 'utils/trello';
+// (async function(){
+// 	console.log(await trelloSearchCard("Erik Svensson / Mogatan 18 (Bankeryd)"))
+// }())

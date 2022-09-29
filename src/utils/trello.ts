@@ -24,47 +24,26 @@ type TrelloCardType = {
 };
 
 const trelloGetListCards = async () => {
-	try {
-		const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
-		return data;
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
+	return data;
 };
 
 export const trelloSearchCard = async (name: string) => {
-	try {
-		const cards = await trelloGetListCards();
-		return cards.find((card: TrelloCardType) => card.name === name);
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	const cards = await trelloGetListCards();
+	return cards.find((card: TrelloCardType) => card.name === name);
 };
 
 export const trelloCreateCard = async (cardData: TrelloCardType) => {
-	try {
-		const { data } = await trelloAPI.post(`/1/cards`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
-		return data;
-	} catch (err: any) {
-		console.log(err);
-		throw new Error(err);
-	}
+	const { data } = await trelloAPI.post(`/1/cards`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
+	return data;
 };
 
 export const trelloUpdateCard = async (cardId: string, cardData: TrelloCardType) => {
-	try {
-		const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
-		return data;
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...cardData });
+	return data;
 };
 
 export const trelloDeleteCard = async (cardId: string) => {
-	try {
-		const { data } = await trelloAPI.delete(`/1/cards/${cardId}`);
-		return data;
-	} catch (err: any) {
-		throw new Error(err);
-	}
+	const { data } = await trelloAPI.delete(`/1/cards/${cardId}`);
+	return data;
 };

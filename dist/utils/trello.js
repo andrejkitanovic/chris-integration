@@ -22,52 +22,26 @@ const trelloAPI = axios_1.default.create({
     },
 });
 const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data } = yield trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
-        return data;
-    }
-    catch (err) {
-        throw new Error(err);
-    }
+    const { data } = yield trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
+    return data;
 });
 const trelloSearchCard = (name) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const cards = yield trelloGetListCards();
-        return cards.find((card) => card.name === name);
-    }
-    catch (err) {
-        throw new Error(err);
-    }
+    const cards = yield trelloGetListCards();
+    return cards.find((card) => card.name === name);
 });
 exports.trelloSearchCard = trelloSearchCard;
 const trelloCreateCard = (cardData) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data } = yield trelloAPI.post(`/1/cards`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, cardData));
-        return data;
-    }
-    catch (err) {
-        console.log(err);
-        throw new Error(err);
-    }
+    const { data } = yield trelloAPI.post(`/1/cards`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, cardData));
+    return data;
 });
 exports.trelloCreateCard = trelloCreateCard;
 const trelloUpdateCard = (cardId, cardData) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, cardData));
-        return data;
-    }
-    catch (err) {
-        throw new Error(err);
-    }
+    const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, cardData));
+    return data;
 });
 exports.trelloUpdateCard = trelloUpdateCard;
 const trelloDeleteCard = (cardId) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { data } = yield trelloAPI.delete(`/1/cards/${cardId}`);
-        return data;
-    }
-    catch (err) {
-        throw new Error(err);
-    }
+    const { data } = yield trelloAPI.delete(`/1/cards/${cardId}`);
+    return data;
 });
 exports.trelloDeleteCard = trelloDeleteCard;

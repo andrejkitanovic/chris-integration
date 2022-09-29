@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -163,7 +163,7 @@ const pipedriveActivityFormat = (body) => {
     };
 };
 const pipedriveSearchActivity = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f, _g;
+    var _f;
     const { data } = yield pipedriveAPI.get(`/activities`, {
         params: {
             type: 'meeting',
@@ -171,8 +171,8 @@ const pipedriveSearchActivity = (userId) => __awaiter(void 0, void 0, void 0, fu
             limit: 1,
         },
     });
-    if ((_g = (_f = data === null || data === void 0 ? void 0 : data.data) === null || _f === void 0 ? void 0 : _f.items) === null || _g === void 0 ? void 0 : _g.length) {
-        return data.data.items[0].item;
+    if ((_f = data === null || data === void 0 ? void 0 : data.data) === null || _f === void 0 ? void 0 : _f.length) {
+        return data.data[0];
     }
     return;
 });
@@ -183,3 +183,14 @@ const pipedriveCreateActivity = (activityData) => __awaiter(void 0, void 0, void
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveCreateActivity = pipedriveCreateActivity;
+const pipedriveUpdateActivitiy = (activityId, activityData) => __awaiter(void 0, void 0, void 0, function* () {
+    const activity = pipedriveActivityFormat(activityData);
+    const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, Object.assign({}, activity));
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveUpdateActivitiy = pipedriveUpdateActivitiy;
+const pipedriveDeleteActivitiy = (activityId) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield pipedriveAPI.delete(`/activities/${activityId}`);
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveDeleteActivitiy = pipedriveDeleteActivitiy;

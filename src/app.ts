@@ -37,3 +37,9 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
+
+// import { trelloSearchCard } from 'utils/trello';
+
+// (async function(){
+// 	console.log(await trelloSearchCard("Erik Svensson / Mogatan 18 (Bankeryd)"))
+// }())

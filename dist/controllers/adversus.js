@@ -80,12 +80,8 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
         }
         // [PIPEDRIVE][ACTIVITY] Update Meeting
         if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-            // await pipdriveUpdateActivity({
-            // 	...requestBody,
-            // 	dealId: pipedriveDeal.id,
-            // 	creatorId: pipedriveCreator.id,
-            // 	userId: pipedriveContact.id,
-            // });
+            const pipedriveActivity = yield (0, pipedrive_1.pipedriveSearchActivity)(pipedriveContact.id);
+            yield (0, pipedrive_1.pipedriveUpdateActivitiy)(pipedriveActivity.id, Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
         }
         res.json({
             message: 'Success',
@@ -108,12 +104,8 @@ const postWebhookBookingDeleted = (req, res, next) => __awaiter(void 0, void 0, 
         const pipedriveContact = yield (0, pipedrive_1.pipedriveSearchContact)(requestBody.epost);
         // [PIPEDRIVE][ACTIVITY] Delete Meeting
         if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
-            // await pipedriveDeleteActivity({
-            // 	...requestBody,
-            // 	dealId: pipedriveDeal.id,
-            // 	creatorId: pipedriveCreator.id,
-            // 	userId: pipedriveContact.id,
-            // });
+            const pipedriveActivity = yield (0, pipedrive_1.pipedriveSearchActivity)(pipedriveContact.id);
+            yield (0, pipedrive_1.pipedriveDeleteActivitiy)(pipedriveActivity === null || pipedriveActivity === void 0 ? void 0 : pipedriveActivity.id);
         }
         // [PIPEDRIVE][DEAL] Founded -> T: Delete | F: Pass
         if (pipedriveDeal) {
