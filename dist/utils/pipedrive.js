@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -107,6 +107,14 @@ const pipedriveDealFormat = (body) => {
         '112c9174964820a0c99b152382c2ee0af9f31071': '',
     };
 };
+const pipedriveGetDealById = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield pipedriveAPI.get(`/deals/${dealId}`);
+    if (data === null || data === void 0 ? void 0 : data.data) {
+        return data.data;
+    }
+    return;
+});
+exports.pipedriveGetDealById = pipedriveGetDealById;
 const pipedriveSearchDeal = (name) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e;
     const { data } = yield pipedriveAPI.get(`/deals/search`, {
