@@ -1,9 +1,17 @@
 import { Router } from 'express';
 import defineRoutes from 'helpers/defineRoutes';
-import { postWebhookActivityDeleted as postWebhookActivityDeletedController } from 'controllers/pipedrive';
+import {
+	postWebhookActivityUpdated as postWebhookActivityUpdatedController,
+	postWebhookActivityDeleted as postWebhookActivityDeletedController,
+} from 'controllers/pipedrive';
 
 const router = Router();
 defineRoutes(router, [
+	{
+		method: 'post',
+		route: '/activity/updated',
+		controller: postWebhookActivityUpdatedController,
+	},
 	{
 		method: 'post',
 		route: '/activity/deleted',
