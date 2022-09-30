@@ -165,7 +165,7 @@ export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 	return data?.data;
 };
 
-export const pipedriveUpdateContact = async (contactId: string, contactData: AdversusBody) => {
+export const pipedriveUpdateContact = async (contactId: number | string, contactData: AdversusBody) => {
 	if (!contactId) return;
 
 	const contact = pipedriveContactFormat(contactData);
@@ -230,7 +230,7 @@ export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveCo
 	return data?.data;
 };
 
-export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody) => {
+export const pipedriveUpdateDeal = async (dealId: number | string, dealData: AdversusBody) => {
 	if (!dealId) return;
 
 	const deal = pipedriveDealFormat(dealData);
@@ -242,7 +242,17 @@ export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody
 	return data?.data;
 };
 
-export const pipedriveDeleteDeal = async (dealId: string) => {
+export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
+	if (!dealId || !ownerId) return;
+
+	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
+		user_id: ownerId,
+	});
+
+	return data?.data;
+};
+
+export const pipedriveDeleteDeal = async (dealId: number | string) => {
 	if (!dealId) return;
 
 	const { data } = await pipedriveAPI.delete(`/deals/${dealId}`);
