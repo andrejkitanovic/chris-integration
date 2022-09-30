@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
+exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -108,3 +108,18 @@ const trelloDeleteCard = (cardId) => __awaiter(void 0, void 0, void 0, function*
     return data;
 });
 exports.trelloDeleteCard = trelloDeleteCard;
+// COMMENT
+const trelloGetCardComments = (cardId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId)
+        return;
+    const { data } = yield trelloAPI.get(`/1/cards/${cardId}/actions?filter=commentCard`);
+    return data;
+});
+exports.trelloGetCardComments = trelloGetCardComments;
+const trelloCreateComment = (cardId, text) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId || !text)
+        return;
+    const { data } = yield trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${text}`);
+    return data;
+});
+exports.trelloCreateComment = trelloCreateComment;

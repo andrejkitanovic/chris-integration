@@ -18,5 +18,10 @@ const router = (0, express_1.Router)();
         route: '/deal',
         controller: pipedrive_1.postWebhookDeal,
     },
+    {
+        method: 'post',
+        route: '/note',
+        controller: pipedrive_1.postWebhookNote,
+    },
 ]);
 exports.default = router;

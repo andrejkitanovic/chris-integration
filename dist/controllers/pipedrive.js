@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postWebhookDeal = exports.postWebhookActivity = void 0;
+exports.postWebhookNote = exports.postWebhookDeal = exports.postWebhookActivity = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
 const trello_1 = require("utils/trello");
@@ -56,4 +56,26 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.postWebhookDeal = postWebhookDeal;
-// [NOTE] CREATED | UPDATED
+const postWebhookNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { current } = req.body;
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
+        // [TRELLO][CARD] Find -> T: Update | F: Pass
+        const trelloCard = yield (0, trello_1.trelloSearchCard)(current.deal.title);
+        // [TRELLO][COMMENT] Create
+        if (trelloCard) {
+            const trelloComments = (yield (0, trello_1.trelloGetCardComments)(trelloCard.id)).map((card) => card.data.text);
+            if (trelloComments.some((comment) => comment === current.content)) {
+                yield (0, trello_1.trelloCreateComment)(trelloCard.id, current.content);
+            }
+        }
+        res.json({
+            message: 'Success',
+        });
+    }
+    catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+exports.postWebhookNote = postWebhookNote;
