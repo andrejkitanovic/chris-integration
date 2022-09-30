@@ -3,6 +3,8 @@ import { writeInFile } from 'helpers/writeInFile';
 import { pipedriveGetActivityById, pipedriveGetDealById, pipedriveSyncActivityUser } from 'utils/pipedrive';
 import { trelloSearchCard, trelloUpdateCard, trelloUpdateCustomFieldsCard } from 'utils/trello';
 
+// [ACTIVITY] CREATED | UPDATED | MERGED | DELETED
+
 export type PipedriveActivityBody = {
 	type_name: 'Meeting';
 	public_description: string;
@@ -59,6 +61,8 @@ export const postWebhookActivity: RequestHandler = async (req, res, next) => {
 	}
 };
 
+// [DEAL] CREATED | UPDATED
+
 export type PipedriveDealBody = {
 	id: number;
 	person_id: number;
@@ -92,3 +96,5 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 		next(err);
 	}
 };
+
+// [NOTE] CREATED | UPDATED

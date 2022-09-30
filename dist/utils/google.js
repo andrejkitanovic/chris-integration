@@ -40,10 +40,11 @@ const useGoogle = (user) => __awaiter(void 0, void 0, void 0, function* () {
             },
         });
         if (data === null || data === void 0 ? void 0 : data.items) {
-            const findMeeting = (_a = data === null || data === void 0 ? void 0 : data.items) === null || _a === void 0 ? void 0 : _a.find((item) => item.summary === 'Möte med Mersol' && (0, dayjs_1.default)(item.start.dateTime).diff((0, dayjs_1.default)(meeting_time)) === 0);
-            return findMeeting;
+            const findMeetings = (_a = data === null || data === void 0 ? void 0 : data.items) === null || _a === void 0 ? void 0 : _a.filter((item) => item.summary.includes('Fri konsultation: Mersol') &&
+                (0, dayjs_1.default)(item.start.dateTime).diff((0, dayjs_1.default)(meeting_time)) === 0);
+            return findMeetings || [];
         }
-        return data === null || data === void 0 ? void 0 : data.items;
+        return [];
     });
     const googleDeleteCalendarEvent = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
         if (!eventId)
