@@ -65,7 +65,7 @@ const postWebhookNote = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         // [TRELLO][COMMENT] Create
         if (trelloCard) {
             const trelloComments = (yield (0, trello_1.trelloGetCardComments)(trelloCard.id)).map((card) => card.data.text);
-            if (trelloComments.some((comment) => comment === current.content)) {
+            if (!trelloComments.some((comment) => comment === current.content)) {
                 yield (0, trello_1.trelloCreateComment)(trelloCard.id, current.content);
             }
         }

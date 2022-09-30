@@ -127,7 +127,7 @@ export const postWebhookNote: RequestHandler = async (req, res, next) => {
 		if (trelloCard) {
 			const trelloComments = (await trelloGetCardComments(trelloCard.id)).map((card: any) => card.data.text);
 
-			if (trelloComments.some((comment: string) => comment === current.content)) {
+			if (!trelloComments.some((comment: string) => comment === current.content)) {
 				await trelloCreateComment(trelloCard.id, current.content);
 			}
 		}
