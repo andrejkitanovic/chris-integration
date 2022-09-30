@@ -15,7 +15,8 @@
 		"format:write": "prettier --write ./src/**/*.ts",
 		"lint:check": "eslint ./src/**/*.ts",
 		"lint:fix": "eslint --fix ./src/**/*.ts",
-		"copy-views": "cp -r ./src/views ./dist"
+		"copy-views": "cp -r ./src/views ./dist",
+		"clear:logs": "rm ./logs/error.log & rm ./logs/request.log"
 	},
 	"author": "Andrej Kitanovic",
 	"license": "ISC",
