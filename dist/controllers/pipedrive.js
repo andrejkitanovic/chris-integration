@@ -41,9 +41,6 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
         // [PIPEDRIVE][DEAL] Sync User -> Activity User
         const pipedriveActivity = yield (0, pipedrive_1.pipedriveGetActivityById)(current.next_activity_id);
-        console.log('CURRENT USER:', current.user_id);
-        console.log('ACTIVITY USER:', pipedriveActivity.user_id);
-        console.log("IS DIFFERENT", current.user_id !== pipedriveActivity.user_id);
         if (current.user_id !== pipedriveActivity.user_id) {
             yield (0, pipedrive_1.pipedriveSyncActivityUser)(current.next_activity_id, current.user_id);
         }

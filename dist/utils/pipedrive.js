@@ -238,6 +238,12 @@ const pipedriveSyncActivityUser = (activityId, user_id) => __awaiter(void 0, voi
         return;
     const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, {
         user_id,
+        participants: [
+            {
+                person_id: user_id,
+                primary_flag: true,
+            },
+        ],
     });
     return data === null || data === void 0 ? void 0 : data.data;
 });
