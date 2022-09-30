@@ -183,17 +183,10 @@ const pipedriveDealFormat = (body: AdversusBody & { pipedriveContactId?: number 
 		currency: 'SEK',
 		'0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0': body.typ_av_tak,
 		d5969b61ed60673aa3143a212214d698fdc73cbc: body.energiforbruking,
-		'780a109ebd42d15adcc56ab514ce100750ee132f': '',
+		'780a109ebd42d15adcc56ab514ce100750ee132f': body.hem,
 		efdcb3fe17889df988d6f4ee668c65b14b05f276: body.placering_av_elcentral,
 		bda50d3b0dec33b4912759927970f53a140ed7f8: body.lutning_pa_tak,
-		ec565cf910b4ede8f17f61146ac4949c61b20860: '',
-		'906a1b6df1074d69790595612fc913f66b76a57a': '',
-		'341dfa743b5a35ab9362b5221305324b72ce577b': '',
-		'53fac6375852b2f10ec97a6475a519aa26edeeb2': '',
-		'3da634fe9832435a890dabc393ba028bb3bef916': '',
-		d17b936aebb47ff47a952948480a8145b58f1920: '',
-		cf494370dff95eaf4cfbfbfba800cac258eccbac: '',
-		'112c9174964820a0c99b152382c2ee0af9f31071': '',
+		ec565cf910b4ede8f17f61146ac4949c61b20860: body.har_du_fyllt_i_mobilfaltet,
 	};
 };
 
