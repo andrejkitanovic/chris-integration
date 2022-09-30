@@ -349,7 +349,7 @@ export const pipedriveUpdateActivity = async (
 };
 
 export const pipedriveSyncActivityUser = async (activityId: string | number, user_id: string | number) => {
-	if (!activityId) return;
+	if (!activityId || !user_id) return;
 
 	const { data } = await pipedriveAPI.put(`/activities/${activityId}`, {
 		user_id,

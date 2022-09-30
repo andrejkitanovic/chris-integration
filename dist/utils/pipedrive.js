@@ -234,7 +234,7 @@ const pipedriveUpdateActivity = (activityId, activityData) => __awaiter(void 0, 
 });
 exports.pipedriveUpdateActivity = pipedriveUpdateActivity;
 const pipedriveSyncActivityUser = (activityId, user_id) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!activityId)
+    if (!activityId || !user_id)
         return;
     const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, {
         user_id,
