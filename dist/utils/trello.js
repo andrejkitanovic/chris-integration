@@ -33,20 +33,20 @@ const trelloCardFormat = (body) => {
     };
 };
 const trelloCustomFieldsFormat = (body) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
     return {
         '633704728e0134015068a893': (_b = (_a = body === null || body === void 0 ? void 0 : body.next_activity) === null || _a === void 0 ? void 0 : _a.location) !== null && _b !== void 0 ? _b : '',
         '63370548efc8a70389777cfb': (_c = body === null || body === void 0 ? void 0 : body.owner_name) !== null && _c !== void 0 ? _c : '',
-        '633705063358d800d391b693': '',
-        '63370443931e2701b93c4145': (_e = (_d = body === null || body === void 0 ? void 0 : body.person_name) === null || _d === void 0 ? void 0 : _d.split(' ')[0]) !== null && _e !== void 0 ? _e : '',
-        '63370468acfe6205cae1b7ac': (_g = (_f = body === null || body === void 0 ? void 0 : body.person_name) === null || _f === void 0 ? void 0 : _f.split(' ')[1]) !== null && _g !== void 0 ? _g : '',
-        '633704e56df6ca01205d85ad': (_j = (_h = body === null || body === void 0 ? void 0 : body.person_id) === null || _h === void 0 ? void 0 : _h.email[0].value) !== null && _j !== void 0 ? _j : '',
-        '633704fe78625e0017de625d': (_l = (_k = body === null || body === void 0 ? void 0 : body.person_id) === null || _k === void 0 ? void 0 : _k.phone[0].value) !== null && _l !== void 0 ? _l : '',
-        '63370510b7016f01cf86959a': '',
-        '6337051e5a9e3d0045e504e6': '',
-        '633705294a7adf00d0530228': '',
-        '6337053160b5c9029d964a91': '',
-        '63370541ac93bf007756fc63': '', // Placering av elcentral/mätare
+        '633705063358d800d391b693': (_d = body['780a109ebd42d15adcc56ab514ce100750ee132f']) !== null && _d !== void 0 ? _d : '',
+        '63370443931e2701b93c4145': (_f = (_e = body === null || body === void 0 ? void 0 : body.person_name) === null || _e === void 0 ? void 0 : _e.split(' ')[0]) !== null && _f !== void 0 ? _f : '',
+        '63370468acfe6205cae1b7ac': (_h = (_g = body === null || body === void 0 ? void 0 : body.person_name) === null || _g === void 0 ? void 0 : _g.split(' ')[1]) !== null && _h !== void 0 ? _h : '',
+        '633704e56df6ca01205d85ad': (_k = (_j = body === null || body === void 0 ? void 0 : body.person_id) === null || _j === void 0 ? void 0 : _j.email[0].value) !== null && _k !== void 0 ? _k : '',
+        '633704fe78625e0017de625d': (_m = (_l = body === null || body === void 0 ? void 0 : body.person_id) === null || _l === void 0 ? void 0 : _l.phone[0].value) !== null && _m !== void 0 ? _m : '',
+        '63370510b7016f01cf86959a': (_o = body["0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0"]) !== null && _o !== void 0 ? _o : "",
+        '6337051e5a9e3d0045e504e6': (_p = body["d5969b61ed60673aa3143a212214d698fdc73cbc"]) !== null && _p !== void 0 ? _p : "",
+        '633705294a7adf00d0530228': (_q = body["bda50d3b0dec33b4912759927970f53a140ed7f8"]) !== null && _q !== void 0 ? _q : "",
+        '6337053160b5c9029d964a91': (_r = body["ec565cf910b4ede8f17f61146ac4949c61b20860"]) !== null && _r !== void 0 ? _r : "",
+        '63370541ac93bf007756fc63': (_s = body["efdcb3fe17889df988d6f4ee668c65b14b05f276"]) !== null && _s !== void 0 ? _s : "", // Placering av elcentral/mätare
     };
 };
 const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () {

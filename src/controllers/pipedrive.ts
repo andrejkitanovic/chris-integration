@@ -82,6 +82,7 @@ export const postWebhookActivityCreated: RequestHandler = async (req, res, next)
 
 		if (trelloCard) {
 			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
+			await trelloUpdateCustomFieldsCard(trelloCard.id, pipedriveDeal);
 		}
 
 		res.json({
@@ -131,6 +132,7 @@ export const postWebhookActivityDeleted: RequestHandler = async (req, res, next)
 
 		if (trelloCard) {
 			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
+			await trelloUpdateCustomFieldsCard(trelloCard.id, pipedriveDeal);
 		}
 
 		res.json({

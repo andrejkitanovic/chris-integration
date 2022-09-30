@@ -98,11 +98,11 @@ const pipedriveDealFormat = (body) => {
         title: `${body.namn} / ${body.adress} (${body.stad})`,
         person_id: body.pipedriveContactId,
         currency: 'SEK',
-        '0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0': body.typ_av_tak,
-        d5969b61ed60673aa3143a212214d698fdc73cbc: body.energiforbruking,
         '780a109ebd42d15adcc56ab514ce100750ee132f': body.hem,
-        efdcb3fe17889df988d6f4ee668c65b14b05f276: body.placering_av_elcentral,
+        '0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0': body.typ_av_tak,
         bda50d3b0dec33b4912759927970f53a140ed7f8: body.lutning_pa_tak,
+        d5969b61ed60673aa3143a212214d698fdc73cbc: body.energiforbruking,
+        efdcb3fe17889df988d6f4ee668c65b14b05f276: body.placering_av_elcentral,
         ec565cf910b4ede8f17f61146ac4949c61b20860: body.har_du_fyllt_i_mobilfaltet,
     };
 };
