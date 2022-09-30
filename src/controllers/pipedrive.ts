@@ -1,7 +1,13 @@
 import { RequestHandler } from 'express';
 import { writeInFile } from 'helpers/writeInFile';
 import { pipedriveGetActivityById, pipedriveGetDealById, pipedriveSyncActivityUser } from 'utils/pipedrive';
-import { trelloSearchCard, trelloUpdateCard, trelloUpdateCustomFieldsCard } from 'utils/trello';
+import {
+	trelloCreateComment,
+	trelloGetCardComments,
+	trelloSearchCard,
+	trelloUpdateCard,
+	trelloUpdateCustomFieldsCard,
+} from 'utils/trello';
 
 // [ACTIVITY] CREATED | UPDATED | MERGED | DELETED
 
@@ -98,3 +104,39 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 };
 
 // [NOTE] CREATED | UPDATED
+
+export type PipedriveNoteBody = {
+	deal: {
+		title: string;
+	};
+	content: string;
+	user_id: number;
+	id: number;
+	deal_id: number;
+};
+
+export const postWebhookNote: RequestHandler = async (req, res, next) => {
+	try {
+		const { current }: { current: PipedriveNoteBody } = req.body;
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
+
+		// [TRELLO][CARD] Find -> T: Update | F: Pass
+		const trelloCard = await trelloSearchCard(current.deal.title);
+
+		// [TRELLO][COMMENT] Create
+		if (trelloCard) {
+			const trelloComments = (await trelloGetCardComments(trelloCard.id)).map((card: any) => card.data.text);
+
+			if (trelloComments.some((comment: string) => comment === current.content)) {
+				await trelloCreateComment(trelloCard.id, current.content);
+			}
+		}
+
+		res.json({
+			message: 'Success',
+		});
+	} catch (err) {
+		console.log(err);
+		next(err);
+	}
+};

@@ -128,3 +128,19 @@ export const trelloDeleteCard = async (cardId: string) => {
 	const { data } = await trelloAPI.delete(`/1/cards/${cardId}`);
 	return data;
 };
+
+// COMMENT
+
+export const trelloGetCardComments = async (cardId: string) => {
+	if (!cardId ) return;
+
+	const { data } = await trelloAPI.get(`/1/cards/${cardId}/actions?filter=commentCard`);
+	return data;
+};
+
+export const trelloCreateComment = async (cardId: string, text: string) => {
+	if (!cardId || !text) return;
+
+	const { data } = await trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${text}`);
+	return data;
+};
