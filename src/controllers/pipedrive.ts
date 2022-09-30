@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { writeInFile } from 'helpers/writeInFile';
 import { pipedriveGetDealById } from 'utils/pipedrive';
-import { trelloSearchCard, trelloUpdateCard } from 'utils/trello';
+import { trelloSearchCard, trelloUpdateCard, trelloUpdateCustomFieldsCard } from 'utils/trello';
 
 export type PipedriveActivityBody = {
 	// last_notification_time: null;
@@ -106,6 +106,7 @@ export const postWebhookActivityUpdated: RequestHandler = async (req, res, next)
 
 		if (trelloCard) {
 			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
+			await trelloUpdateCustomFieldsCard(trelloCard.id, pipedriveDeal);
 		}
 
 		res.json({

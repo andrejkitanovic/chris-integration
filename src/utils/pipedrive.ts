@@ -9,15 +9,15 @@ const pipedriveAPI = axios.create({
 	},
 });
 
-type PipedriveContactType = {
+export type PipedriveContactType = {
 	name: string;
 	primary_email?: string;
-	email?: {
+	email: {
 		value: string;
 		primary: boolean;
 		label: string;
 	}[];
-	phone?: {
+	phone: {
 		value: string;
 		primary: boolean;
 		label: string;
@@ -41,7 +41,7 @@ export type PipedriveDealType = {
 	value?: string;
 	currency?: string;
 	user_id?: number;
-	person_id?: number;
+	person_id?: number | PipedriveContactType;
 	org_id?: number;
 	pipeline_id?: number;
 	status?: string;
@@ -65,6 +65,8 @@ export type PipedriveDealType = {
 	'112c9174964820a0c99b152382c2ee0af9f31071'?: string;
 
 	next_activity?: PipedriveActivityType;
+	owner_name?: string;
+	person_name?: string;
 };
 
 type PipedriveActivityType = {
@@ -261,8 +263,19 @@ const pipedriveActivityFormat = (
 		person_id: body.userId,
 		// note: `Fri konsultation: Mersol / ${body.namn}`,
 		location: body.adress,
-		// public_description:  `Fri konsultation: Mersol / ${body.namn}`,
-		subject: `Fri konsultation: Mersol / ${body.namn}`,
+		public_description: `
+		Header of invitation:
+		Fri konsultation: Mersol x ${body.namn}
+		
+		Description of invitation:
+		Till mötet så vill vi att ni tar fram en el-faktura, så att vi kan göra en kalkyl på era förutsättningar.
+		
+		Agenda:
+		- Så fungerar solceller
+		- Investeringskalkyl
+		- Kontroll av fastighet (edited)
+		`,
+		subject: `Fri konsultation: Mersol x ${body.namn}`,
 		type: 'meeting',
 		user_id: body.creatorId,
 		attendees: [

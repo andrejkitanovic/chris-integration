@@ -44,11 +44,12 @@ app.use('/logs/errors', express_1.default.static('logs/error.log'));
 (0, routes_1.default)(app);
 app.use(error_1.default);
 (0, connection_1.default)(app);
-const pipedrive_1 = require("utils/pipedrive");
+const trello_1 = require("utils/trello");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(yield (0, pipedrive_1.pipedriveSearchContact)(''));
+            const card = yield (0, trello_1.trelloSearchCard)('Testing');
+            console.log(yield (0, trello_1.trelloGetCustomFieldsCard)(card.id));
         }
         catch (err) {
             console.log(err);

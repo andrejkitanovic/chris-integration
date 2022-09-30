@@ -164,8 +164,19 @@ const pipedriveActivityFormat = (body) => {
         person_id: body.userId,
         // note: `Fri konsultation: Mersol / ${body.namn}`,
         location: body.adress,
-        // public_description:  `Fri konsultation: Mersol / ${body.namn}`,
-        subject: `Fri konsultation: Mersol / ${body.namn}`,
+        public_description: `
+		Header of invitation:
+		Fri konsultation: Mersol x ${body.namn}
+		
+		Description of invitation:
+		Till mötet så vill vi att ni tar fram en el-faktura, så att vi kan göra en kalkyl på era förutsättningar.
+		
+		Agenda:
+		- Så fungerar solceller
+		- Investeringskalkyl
+		- Kontroll av fastighet (edited)
+		`,
+        subject: `Fri konsultation: Mersol x ${body.namn}`,
         type: 'meeting',
         user_id: body.creatorId,
         attendees: [

@@ -44,6 +44,7 @@ const postWebhookActivityUpdated = (req, res, next) => __awaiter(void 0, void 0,
         const trelloCard = yield (0, trello_1.trelloSearchCard)(pipedriveDeal.title);
         if (trelloCard) {
             yield (0, trello_1.trelloUpdateCard)(trelloCard.id, pipedriveDeal);
+            yield (0, trello_1.trelloUpdateCustomFieldsCard)(trelloCard.id, pipedriveDeal);
         }
         res.json({
             message: 'Success',
