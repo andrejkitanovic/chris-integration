@@ -70,7 +70,7 @@ export type PipedriveDealBody = {
 	title: string;
 };
 
-export const postWebhookDealUpdated: RequestHandler = async (req, res, next) => {
+export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 	try {
 		const { current }: { current: PipedriveDealBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });

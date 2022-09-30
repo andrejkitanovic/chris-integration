@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postWebhookDealUpdated = exports.postWebhookActivity = void 0;
+exports.postWebhookDeal = exports.postWebhookActivity = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
 const trello_1 = require("utils/trello");
@@ -35,7 +35,7 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.postWebhookActivity = postWebhookActivity;
-const postWebhookDealUpdated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
@@ -52,4 +52,4 @@ const postWebhookDealUpdated = (req, res, next) => __awaiter(void 0, void 0, voi
         next(err);
     }
 });
-exports.postWebhookDealUpdated = postWebhookDealUpdated;
+exports.postWebhookDeal = postWebhookDeal;

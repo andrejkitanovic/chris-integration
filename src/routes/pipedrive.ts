@@ -2,7 +2,7 @@ import { Router } from 'express';
 import defineRoutes from 'helpers/defineRoutes';
 import {
 	postWebhookActivity as postWebhookActivityController,
-	postWebhookDealUpdated as postWebhookDealUpdatedController,
+	postWebhookDeal as postWebhookDealController,
 } from 'controllers/pipedrive';
 
 const router = Router();
@@ -14,8 +14,8 @@ defineRoutes(router, [
 	},
 	{
 		method: 'post',
-		route: '/deal/updated',
-		controller: postWebhookDealUpdatedController,
+		route: '/deal',
+		controller: postWebhookDealController,
 	},
 ]);
 
