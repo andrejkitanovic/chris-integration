@@ -37,6 +37,8 @@ const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () 
     return data;
 });
 const trelloSearchCard = (name) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!name)
+        return;
     const cards = yield trelloGetListCards();
     return cards.find((card) => card.name === name);
 });
@@ -48,12 +50,16 @@ const trelloCreateCard = (cardData) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.trelloCreateCard = trelloCreateCard;
 const trelloUpdateCard = (cardId, cardData) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId)
+        return;
     const card = trelloCardFormat(cardData);
     const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, card));
     return data;
 });
 exports.trelloUpdateCard = trelloUpdateCard;
 const trelloDeleteCard = (cardId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId)
+        return;
     const { data } = yield trelloAPI.delete(`/1/cards/${cardId}`);
     return data;
 });

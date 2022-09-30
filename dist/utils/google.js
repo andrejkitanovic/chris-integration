@@ -31,32 +31,25 @@ const useGoogle = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const calendarId = user.email;
     const googleGetCalendarSearchEvent = (meeting_time) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
-        try {
-            const { data } = yield calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
-                params: {
-                    q: 'Möte med Mersol',
-                    timeMin: meeting_time,
-                },
-            });
-            if (data === null || data === void 0 ? void 0 : data.items) {
-                const findMeeting = (_a = data === null || data === void 0 ? void 0 : data.items) === null || _a === void 0 ? void 0 : _a.find((item) => item.summary === 'Möte med Mersol' &&
-                    (0, dayjs_1.default)(item.start.dateTime).diff((0, dayjs_1.default)(meeting_time)) === 0);
-                return findMeeting;
-            }
-            return data === null || data === void 0 ? void 0 : data.items;
+        if (!meeting_time)
+            return;
+        const { data } = yield calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
+            params: {
+                q: 'Möte med Mersol',
+                timeMin: meeting_time,
+            },
+        });
+        if (data === null || data === void 0 ? void 0 : data.items) {
+            const findMeeting = (_a = data === null || data === void 0 ? void 0 : data.items) === null || _a === void 0 ? void 0 : _a.find((item) => item.summary === 'Möte med Mersol' && (0, dayjs_1.default)(item.start.dateTime).diff((0, dayjs_1.default)(meeting_time)) === 0);
+            return findMeeting;
         }
-        catch (err) {
-            throw new Error(err);
-        }
+        return data === null || data === void 0 ? void 0 : data.items;
     });
     const googleDeleteCalendarEvent = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const { data } = yield calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
-            return data;
-        }
-        catch (err) {
-            throw new Error(err);
-        }
+        if (!eventId)
+            return;
+        const { data } = yield calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
+        return data;
     });
     return {
         googleGetCalendarSearchEvent,

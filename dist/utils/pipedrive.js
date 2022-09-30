@@ -23,6 +23,8 @@ const pipedriveAPI = axios_1.default.create({
 });
 // USERS
 const pipedriveSearchUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!email)
+        return;
     const { data } = yield pipedriveAPI.get(`/users/find`, {
         params: {
             term: email,
@@ -61,6 +63,8 @@ const pipedriveGetContacts = () => __awaiter(void 0, void 0, void 0, function* (
 exports.pipedriveGetContacts = pipedriveGetContacts;
 const pipedriveSearchContact = (email) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
+    if (!email)
+        return;
     const { data } = yield pipedriveAPI.get(`/persons/search`, {
         params: {
             term: email,
@@ -81,6 +85,8 @@ const pipedriveCreateContact = (contactData) => __awaiter(void 0, void 0, void 0
 });
 exports.pipedriveCreateContact = pipedriveCreateContact;
 const pipedriveUpdateContact = (contactId, contactData) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!contactId)
+        return;
     const contact = pipedriveContactFormat(contactData);
     const { data } = yield pipedriveAPI.put(`/persons/${contactId}`, Object.assign({}, contact));
     return data === null || data === void 0 ? void 0 : data.data;
@@ -108,6 +114,8 @@ const pipedriveDealFormat = (body) => {
     };
 };
 const pipedriveGetDealById = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId)
+        return;
     const { data } = yield pipedriveAPI.get(`/deals/${dealId}`);
     if (data === null || data === void 0 ? void 0 : data.data) {
         return data.data;
@@ -117,6 +125,8 @@ const pipedriveGetDealById = (dealId) => __awaiter(void 0, void 0, void 0, funct
 exports.pipedriveGetDealById = pipedriveGetDealById;
 const pipedriveSearchDeal = (name) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e;
+    if (!name)
+        return;
     const { data } = yield pipedriveAPI.get(`/deals/search`, {
         params: {
             stage_id: process.env.PIPEDRIVE_STAGE_ID,
@@ -137,12 +147,16 @@ const pipedriveCreateDeal = (dealData) => __awaiter(void 0, void 0, void 0, func
 });
 exports.pipedriveCreateDeal = pipedriveCreateDeal;
 const pipedriveUpdateDeal = (dealId, dealData) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId)
+        return;
     const deal = pipedriveDealFormat(dealData);
     const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, Object.assign({ stage_id: process.env.PIPEDRIVE_STAGE_ID }, deal));
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateDeal = pipedriveUpdateDeal;
 const pipedriveDeleteDeal = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId)
+        return;
     const { data } = yield pipedriveAPI.delete(`/deals/${dealId}`);
     return data === null || data === void 0 ? void 0 : data.data;
 });
@@ -172,6 +186,8 @@ const pipedriveActivityFormat = (body) => {
 };
 const pipedriveSearchActivity = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
+    if (!userId)
+        return;
     const { data } = yield pipedriveAPI.get(`/activities`, {
         params: {
             type: 'meeting',
@@ -192,12 +208,16 @@ const pipedriveCreateActivity = (activityData) => __awaiter(void 0, void 0, void
 });
 exports.pipedriveCreateActivity = pipedriveCreateActivity;
 const pipedriveUpdateActivitiy = (activityId, activityData) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!activityId)
+        return;
     const activity = pipedriveActivityFormat(activityData);
     const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, Object.assign({}, activity));
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateActivitiy = pipedriveUpdateActivitiy;
 const pipedriveDeleteActivitiy = (activityId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!activityId)
+        return;
     const { data } = yield pipedriveAPI.delete(`/activities/${activityId}`);
     return data === null || data === void 0 ? void 0 : data.data;
 });

@@ -69,6 +69,30 @@ export type PipedriveActivityBody = {
 	add_time: string;
 };
 
+export const postWebhookActivityCreated: RequestHandler = async (req, res, next) => {
+	try {
+		const { current }: { current: PipedriveActivityBody } = req.body;
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
+
+		// [PIPEDRIVE][DEAL] Find
+		const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
+
+		// [TRELLO][CARD] Find -> T: Update | F: Pass
+		const trelloCard = await trelloSearchCard(pipedriveDeal.title);
+
+		if (trelloCard) {
+			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
+		}
+
+		res.json({
+			message: 'Success',
+		});
+	} catch (err) {
+		console.log(err);
+		next(err);
+	}
+};
+
 export const postWebhookActivityUpdated: RequestHandler = async (req, res, next) => {
 	try {
 		const { current }: { current: PipedriveActivityBody } = req.body;

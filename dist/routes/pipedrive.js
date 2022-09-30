@@ -10,6 +10,11 @@ const router = (0, express_1.Router)();
 (0, defineRoutes_1.default)(router, [
     {
         method: 'post',
+        route: '/activity/created',
+        controller: pipedrive_1.postWebhookActivityCreated,
+    },
+    {
+        method: 'post',
         route: '/activity/updated',
         controller: pipedrive_1.postWebhookActivityUpdated,
     },
