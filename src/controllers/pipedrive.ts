@@ -77,7 +77,7 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 
 		// [PIPEDRIVE][DEAL] Sync Creator -> User
 		if (current.creator_user_id !== current.user_id) {
-			await pipedriveSyncDealOwner(current.id, current.user_id)
+			await pipedriveSyncDealOwner(current.id, current.creator_user_id)
 		}
 
 		res.json({
