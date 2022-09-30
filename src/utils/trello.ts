@@ -41,6 +41,8 @@ const trelloGetListCards = async () => {
 };
 
 export const trelloSearchCard = async (name: string) => {
+	if (!name) return;
+
 	const cards = await trelloGetListCards();
 	return cards.find((card: TrelloCardType) => card.name === name);
 };
@@ -52,12 +54,16 @@ export const trelloCreateCard = async (cardData: PipedriveDealType) => {
 };
 
 export const trelloUpdateCard = async (cardId: string, cardData: PipedriveDealType) => {
+	if (!cardId) return;
+
 	const card = trelloCardFormat(cardData);
 	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...card });
 	return data;
 };
 
 export const trelloDeleteCard = async (cardId: string) => {
+	if (!cardId) return;
+	
 	const { data } = await trelloAPI.delete(`/1/cards/${cardId}`);
 	return data;
 };

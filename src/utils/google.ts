@@ -21,38 +21,32 @@ export const useGoogle = async (user: IUser) => {
 	const calendarId = user.email;
 
 	const googleGetCalendarSearchEvent = async (meeting_time: string) => {
-		try {
-			const { data } = await calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
-				params: {
-					q: 'Möte med Mersol',
-					timeMin: meeting_time,
-				},
-			});
+		if (!meeting_time) return;
 
-			if (data?.items) {
-				const findMeeting = data?.items?.find(
-					(item: any) =>
-						item.summary === 'Möte med Mersol' &&
-						dayjs(item.start.dateTime).diff(dayjs(meeting_time)) === 0
-				);
+		const { data } = await calendarGoogleAPI.get(`/calendars/${calendarId}/events`, {
+			params: {
+				q: 'Möte med Mersol',
+				timeMin: meeting_time,
+			},
+		});
 
-				return findMeeting;
-			}
+		if (data?.items) {
+			const findMeeting = data?.items?.find(
+				(item: any) => item.summary === 'Möte med Mersol' && dayjs(item.start.dateTime).diff(dayjs(meeting_time)) === 0
+			);
 
-			return data?.items;
-		} catch (err: any) {
-			throw new Error(err);
+			return findMeeting;
 		}
+
+		return data?.items;
 	};
 
 	const googleDeleteCalendarEvent = async (eventId: string) => {
-		try {
-			const { data } = await calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
+		if (!eventId) return;
 
-			return data;
-		} catch (err: any) {
-			throw new Error(err);
-		}
+		const { data } = await calendarGoogleAPI.delete(`/calendars/${calendarId}/events/${eventId}`);
+
+		return data;
 	};
 
 	return {

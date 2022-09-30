@@ -95,6 +95,8 @@ type PipedriveActivityType = {
 // USERS
 
 export const pipedriveSearchUser = async (email: string) => {
+	if (!email) return;
+
 	const { data } = await pipedriveAPI.get(`/users/find`, {
 		params: {
 			term: email,
@@ -136,6 +138,8 @@ export const pipedriveGetContacts = async () => {
 };
 
 export const pipedriveSearchContact = async (email: string) => {
+	if (!email) return;
+
 	const { data } = await pipedriveAPI.get(`/persons/search`, {
 		params: {
 			term: email,
@@ -160,6 +164,8 @@ export const pipedriveCreateContact = async (contactData: AdversusBody) => {
 };
 
 export const pipedriveUpdateContact = async (contactId: string, contactData: AdversusBody) => {
+	if (!contactId) return;
+
 	const contact = pipedriveContactFormat(contactData);
 	const { data } = await pipedriveAPI.put(`/persons/${contactId}`, {
 		...contact,
@@ -192,6 +198,8 @@ const pipedriveDealFormat = (body: AdversusBody & { pipedriveContactId?: number 
 };
 
 export const pipedriveGetDealById = async (dealId: number) => {
+	if (!dealId) return;
+
 	const { data } = await pipedriveAPI.get(`/deals/${dealId}`);
 
 	if (data?.data) {
@@ -201,6 +209,8 @@ export const pipedriveGetDealById = async (dealId: number) => {
 };
 
 export const pipedriveSearchDeal = async (name: string) => {
+	if (!name) return;
+
 	const { data } = await pipedriveAPI.get(`/deals/search`, {
 		params: {
 			stage_id: process.env.PIPEDRIVE_STAGE_ID,
@@ -226,6 +236,8 @@ export const pipedriveCreateDeal = async (dealData: AdversusBody & { pipedriveCo
 };
 
 export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody) => {
+	if (!dealId) return;
+
 	const deal = pipedriveDealFormat(dealData);
 	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
 		stage_id: process.env.PIPEDRIVE_STAGE_ID,
@@ -236,6 +248,8 @@ export const pipedriveUpdateDeal = async (dealId: string, dealData: AdversusBody
 };
 
 export const pipedriveDeleteDeal = async (dealId: string) => {
+	if (!dealId) return;
+
 	const { data } = await pipedriveAPI.delete(`/deals/${dealId}`);
 
 	return data?.data;
@@ -269,6 +283,8 @@ const pipedriveActivityFormat = (
 };
 
 export const pipedriveSearchActivity = async (userId: string) => {
+	if (!userId) return;
+
 	const { data } = await pipedriveAPI.get(`/activities`, {
 		params: {
 			type: 'meeting',
@@ -298,6 +314,8 @@ export const pipedriveUpdateActivitiy = async (
 	activityId: string,
 	activityData: AdversusBody & { dealId: number; creatorId: number; userId: number }
 ) => {
+	if (!activityId) return;
+
 	const activity = pipedriveActivityFormat(activityData);
 	const { data } = await pipedriveAPI.put(`/activities/${activityId}`, {
 		...activity,
@@ -307,6 +325,8 @@ export const pipedriveUpdateActivitiy = async (
 };
 
 export const pipedriveDeleteActivitiy = async (activityId: string) => {
+	if (!activityId) return;
+
 	const { data } = await pipedriveAPI.delete(`/activities/${activityId}`);
 
 	return data?.data;

@@ -38,8 +38,12 @@ app.use(errorMiddleware);
 
 connection(app);
 
-// import { trelloSearchCard } from 'utils/trello';
+import { pipedriveSearchContact } from 'utils/pipedrive';
 
-// (async function(){
-// 	console.log(await trelloSearchCard("Erik Svensson / Mogatan 18 (Bankeryd)"))
-// }())
+(async function () {
+	try {
+		console.log(await pipedriveSearchContact(''));
+	} catch (err) {
+		console.log(err);
+	}
+})();
