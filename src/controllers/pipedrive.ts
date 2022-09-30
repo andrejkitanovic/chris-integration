@@ -78,9 +78,6 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 		// [PIPEDRIVE][DEAL] Sync User -> Activity User
 		const pipedriveActivity = await pipedriveGetActivityById(current.next_activity_id);
 
-		console.log('CURRENT USER:', current.user_id);
-		console.log('ACTIVITY USER:', pipedriveActivity.user_id);
-		console.log("IS DIFFERENT", current.user_id !== pipedriveActivity.user_id)
 		if (current.user_id !== pipedriveActivity.user_id) {
 			await pipedriveSyncActivityUser(current.next_activity_id, current.user_id);
 		}
