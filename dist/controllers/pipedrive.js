@@ -17,6 +17,8 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
+        if (!current.deal_id)
+            throw new Error();
         // [PIPEDRIVE][DEAL] Find
         const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
         // [TRELLO][CARD] Find -> T: Update | F: Pass
@@ -41,7 +43,7 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
         // [PIPEDRIVE][DEAL] Sync User -> Activity User
         const pipedriveActivity = yield (0, pipedrive_1.pipedriveGetActivityById)(current.next_activity_id);
-        if (current.user_id !== pipedriveActivity.user_id) {
+        if (pipedriveActivity && current.user_id !== pipedriveActivity.user_id) {
             yield (0, pipedrive_1.pipedriveSyncActivityUser)(current.next_activity_id, current.user_id);
         }
         res.json({

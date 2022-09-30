@@ -37,6 +37,8 @@ export const postWebhookActivity: RequestHandler = async (req, res, next) => {
 		const { current }: { current: PipedriveActivityBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
 
+		if (!current.deal_id) throw new Error();
+
 		// [PIPEDRIVE][DEAL] Find
 		const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
 
@@ -78,7 +80,7 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 		// [PIPEDRIVE][DEAL] Sync User -> Activity User
 		const pipedriveActivity = await pipedriveGetActivityById(current.next_activity_id);
 
-		if (current.user_id !== pipedriveActivity.user_id) {
+		if (pipedriveActivity && current.user_id !== pipedriveActivity.user_id) {
 			await pipedriveSyncActivityUser(current.next_activity_id, current.user_id);
 		}
 
