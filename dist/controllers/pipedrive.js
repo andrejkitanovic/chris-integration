@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postWebhookActivity = void 0;
+exports.postWebhookDealUpdated = exports.postWebhookActivity = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
 const trello_1 = require("utils/trello");
@@ -35,3 +35,21 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.postWebhookActivity = postWebhookActivity;
+const postWebhookDealUpdated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { current } = req.body;
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
+        // [PIPEDRIVE][DEAL] Sync Creator -> User
+        if (current.creator_user_id !== current.user_id) {
+            yield (0, pipedrive_1.pipedriveSyncDealOwner)(current.id, current.user_id);
+        }
+        res.json({
+            message: 'Success',
+        });
+    }
+    catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+exports.postWebhookDealUpdated = postWebhookDealUpdated;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveSyncDealOwner = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -147,6 +147,15 @@ const pipedriveUpdateDeal = (dealId, dealData) => __awaiter(void 0, void 0, void
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateDeal = pipedriveUpdateDeal;
+const pipedriveSyncDealOwner = (dealId, ownerId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId || !ownerId)
+        return;
+    const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, {
+        user_id: ownerId,
+    });
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveSyncDealOwner = pipedriveSyncDealOwner;
 const pipedriveDeleteDeal = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!dealId)
         return;
