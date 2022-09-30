@@ -81,7 +81,7 @@ const postWebhookBookingUpdated = (req, res, next) => __awaiter(void 0, void 0, 
         // [PIPEDRIVE][ACTIVITY] Update Meeting
         if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
             const pipedriveActivity = yield (0, pipedrive_1.pipedriveSearchActivity)(pipedriveContact.id);
-            yield (0, pipedrive_1.pipedriveUpdateActivitiy)(pipedriveActivity.id, Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
+            yield (0, pipedrive_1.pipedriveUpdateActivity)(pipedriveActivity.id, Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
         }
         res.json({
             message: 'Success',

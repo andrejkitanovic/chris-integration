@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveDeleteActivitiy = exports.pipedriveUpdateActivitiy = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveDeleteDeal = exports.pipedriveSyncDealOwner = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveDeleteActivitiy = exports.pipedriveSyncActivityUser = exports.pipedriveUpdateActivity = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveGetActivityById = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -147,15 +147,13 @@ const pipedriveUpdateDeal = (dealId, dealData) => __awaiter(void 0, void 0, void
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateDeal = pipedriveUpdateDeal;
-const pipedriveSyncDealOwner = (dealId, ownerId) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!dealId || !ownerId)
-        return;
-    const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, {
-        user_id: ownerId,
-    });
-    return data === null || data === void 0 ? void 0 : data.data;
-});
-exports.pipedriveSyncDealOwner = pipedriveSyncDealOwner;
+// export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
+// 	if (!dealId || !ownerId) return;
+// 	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
+// 		user_id: ownerId,
+// 	});
+// 	return data?.data;
+// };
 const pipedriveDeleteDeal = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!dealId)
         return;
@@ -197,6 +195,13 @@ const pipedriveActivityFormat = (body) => {
         done: 0,
     };
 };
+const pipedriveGetActivityById = (activityId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!activityId)
+        return;
+    const { data } = yield pipedriveAPI.get(`/activities/${activityId}`);
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveGetActivityById = pipedriveGetActivityById;
 const pipedriveSearchActivity = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
     if (!userId)
@@ -220,14 +225,23 @@ const pipedriveCreateActivity = (activityData) => __awaiter(void 0, void 0, void
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveCreateActivity = pipedriveCreateActivity;
-const pipedriveUpdateActivitiy = (activityId, activityData) => __awaiter(void 0, void 0, void 0, function* () {
+const pipedriveUpdateActivity = (activityId, activityData) => __awaiter(void 0, void 0, void 0, function* () {
     if (!activityId)
         return;
     const activity = pipedriveActivityFormat(activityData);
     const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, Object.assign({}, activity));
     return data === null || data === void 0 ? void 0 : data.data;
 });
-exports.pipedriveUpdateActivitiy = pipedriveUpdateActivitiy;
+exports.pipedriveUpdateActivity = pipedriveUpdateActivity;
+const pipedriveSyncActivityUser = (activityId, user_id) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!activityId)
+        return;
+    const { data } = yield pipedriveAPI.put(`/activities/${activityId}`, {
+        user_id,
+    });
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveSyncActivityUser = pipedriveSyncActivityUser;
 const pipedriveDeleteActivitiy = (activityId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!activityId)
         return;

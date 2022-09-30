@@ -242,15 +242,15 @@ export const pipedriveUpdateDeal = async (dealId: number | string, dealData: Adv
 	return data?.data;
 };
 
-export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
-	if (!dealId || !ownerId) return;
+// export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
+// 	if (!dealId || !ownerId) return;
 
-	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
-		user_id: ownerId,
-	});
+// 	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
+// 		user_id: ownerId,
+// 	});
 
-	return data?.data;
-};
+// 	return data?.data;
+// };
 
 export const pipedriveDeleteDeal = async (dealId: number | string) => {
 	if (!dealId) return;
@@ -298,7 +298,15 @@ const pipedriveActivityFormat = (
 	};
 };
 
-export const pipedriveSearchActivity = async (userId: string) => {
+export const pipedriveGetActivityById = async (activityId: string | number) => {
+	if (!activityId) return;
+
+	const { data } = await pipedriveAPI.get(`/activities/${activityId}`);
+
+	return data?.data;
+};
+
+export const pipedriveSearchActivity = async (userId: string | number) => {
 	if (!userId) return;
 
 	const { data } = await pipedriveAPI.get(`/activities`, {
@@ -326,7 +334,7 @@ export const pipedriveCreateActivity = async (
 	return data?.data;
 };
 
-export const pipedriveUpdateActivitiy = async (
+export const pipedriveUpdateActivity = async (
 	activityId: string,
 	activityData: AdversusBody & { dealId: number; creatorId: number; userId: number }
 ) => {
@@ -340,7 +348,17 @@ export const pipedriveUpdateActivitiy = async (
 	return data?.data;
 };
 
-export const pipedriveDeleteActivitiy = async (activityId: string) => {
+export const pipedriveSyncActivityUser = async (activityId: string | number, user_id: string | number) => {
+	if (!activityId) return;
+
+	const { data } = await pipedriveAPI.put(`/activities/${activityId}`, {
+		user_id,
+	});
+
+	return data?.data;
+};
+
+export const pipedriveDeleteActivitiy = async (activityId: string | number) => {
 	if (!activityId) return;
 
 	const { data } = await pipedriveAPI.delete(`/activities/${activityId}`);

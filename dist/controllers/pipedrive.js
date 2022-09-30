@@ -39,9 +39,10 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
-        // [PIPEDRIVE][DEAL] Sync Creator -> User
-        if (current.creator_user_id !== current.user_id) {
-            yield (0, pipedrive_1.pipedriveSyncDealOwner)(current.id, current.creator_user_id);
+        // [PIPEDRIVE][DEAL] Sync User -> Activity User
+        const pipedriveActivity = yield (0, pipedrive_1.pipedriveGetActivityById)(current.next_activity_id);
+        if (current.user_id !== pipedriveActivity.user_id) {
+            yield (0, pipedrive_1.pipedriveSyncActivityUser)(current.next_activity_id, current.user_id);
         }
         res.json({
             message: 'Success',

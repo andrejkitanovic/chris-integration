@@ -12,7 +12,7 @@ import {
 	pipedriveSearchUser,
 	pipedriveSearchActivity,
 	pipedriveDeleteActivitiy,
-	pipedriveUpdateActivitiy,
+	pipedriveUpdateActivity,
 } from 'utils/pipedrive';
 import User from 'models/user';
 import { useGoogle } from 'utils/google';
@@ -133,7 +133,7 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
 			const pipedriveActivity = await pipedriveSearchActivity(pipedriveContact.id);
 
-			await pipedriveUpdateActivitiy(pipedriveActivity.id, {
+			await pipedriveUpdateActivity(pipedriveActivity.id, {
 				...requestBody,
 				dealId: pipedriveDeal.id,
 				creatorId: pipedriveCreator.id,

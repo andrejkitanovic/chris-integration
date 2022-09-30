@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { writeInFile } from 'helpers/writeInFile';
-import { pipedriveGetDealById, pipedriveSyncDealOwner } from 'utils/pipedrive';
+import { pipedriveGetActivityById, pipedriveGetDealById, pipedriveSyncActivityUser } from 'utils/pipedrive';
 import { trelloSearchCard, trelloUpdateCard, trelloUpdateCustomFieldsCard } from 'utils/trello';
 
 export type PipedriveActivityBody = {
@@ -75,9 +75,10 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 		const { current }: { current: PipedriveDealBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
 
-		// [PIPEDRIVE][DEAL] Sync Creator -> User
-		if (current.creator_user_id !== current.user_id) {
-			await pipedriveSyncDealOwner(current.id, current.creator_user_id)
+		// [PIPEDRIVE][DEAL] Sync User -> Activity User
+		const pipedriveActivity = await pipedriveGetActivityById(current.next_activity_id)
+		if (current.user_id !== pipedriveActivity.user_id) {
+			await pipedriveSyncActivityUser(current.next_activity_id, current.user_id)
 		}
 
 		res.json({

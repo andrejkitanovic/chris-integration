@@ -38,13 +38,13 @@ app.use(errorMiddleware);
 
 connection(app);
 
-import { trelloSearchCard, trelloGetCustomFieldsCard } from 'utils/trello';
+import { pipedriveGetActivityById } from 'utils/pipedrive';
 
 (async function () {
 	try {
-		const card = await trelloSearchCard('Testing');
-
-		console.log(await trelloGetCustomFieldsCard(card.id));
+		const activity = await pipedriveGetActivityById(516);
+		console.log(activity)
+		// console.log(await trelloGetCustomFieldsCard(card.id));
 	} catch (err) {
 		console.log(err);
 	}
