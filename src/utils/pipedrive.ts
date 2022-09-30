@@ -353,12 +353,6 @@ export const pipedriveSyncActivityUser = async (activityId: string | number, use
 
 	const { data } = await pipedriveAPI.put(`/activities/${activityId}`, {
 		user_id,
-		participants: [
-			{
-				person_id: user_id,
-				primary_flag: true,
-			},
-		],
 	});
 
 	return data?.data;
