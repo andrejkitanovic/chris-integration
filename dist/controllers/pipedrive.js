@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postWebhookActivityDeleted = exports.postWebhookActivityUpdated = exports.postWebhookActivityCreated = void 0;
+exports.postWebhookActivity = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
 const trello_1 = require("utils/trello");
-const postWebhookActivityCreated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
@@ -34,48 +34,4 @@ const postWebhookActivityCreated = (req, res, next) => __awaiter(void 0, void 0,
         next(err);
     }
 });
-exports.postWebhookActivityCreated = postWebhookActivityCreated;
-const postWebhookActivityUpdated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { current } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
-        // [PIPEDRIVE][DEAL] Find
-        const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
-        // [TRELLO][CARD] Find -> T: Update | F: Pass
-        const trelloCard = yield (0, trello_1.trelloSearchCard)(pipedriveDeal.title);
-        if (trelloCard) {
-            yield (0, trello_1.trelloUpdateCard)(trelloCard.id, pipedriveDeal);
-            yield (0, trello_1.trelloUpdateCustomFieldsCard)(trelloCard.id, pipedriveDeal);
-        }
-        res.json({
-            message: 'Success',
-        });
-    }
-    catch (err) {
-        console.log(err);
-        next(err);
-    }
-});
-exports.postWebhookActivityUpdated = postWebhookActivityUpdated;
-const postWebhookActivityDeleted = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { current } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
-        // [PIPEDRIVE][DEAL] Find
-        const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
-        // [TRELLO][CARD] Find -> T: Delete | F: Pass
-        const trelloCard = yield (0, trello_1.trelloSearchCard)(pipedriveDeal.title);
-        if (trelloCard) {
-            yield (0, trello_1.trelloUpdateCard)(trelloCard.id, pipedriveDeal);
-            yield (0, trello_1.trelloUpdateCustomFieldsCard)(trelloCard.id, pipedriveDeal);
-        }
-        res.json({
-            message: 'Success',
-        });
-    }
-    catch (err) {
-        console.log(err);
-        next(err);
-    }
-});
-exports.postWebhookActivityDeleted = postWebhookActivityDeleted;
+exports.postWebhookActivity = postWebhookActivity;
