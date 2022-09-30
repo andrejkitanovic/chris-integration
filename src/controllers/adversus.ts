@@ -13,6 +13,7 @@ import {
 	pipedriveSearchActivity,
 	pipedriveDeleteActivitiy,
 	pipedriveUpdateActivity,
+	pipedriveCreateNote,
 } from 'utils/pipedrive';
 import User from 'models/user';
 import { useGoogle } from 'utils/google';
@@ -82,6 +83,11 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 				creatorId: pipedriveCreator.id,
 				userId: pipedriveContact.id,
 			});
+		}
+
+		// [PIPEDRIVE][NOTE] Create Note
+		if (pipedriveDeal && requestBody.mote_kommentar) {
+			await pipedriveCreateNote(pipedriveDeal.id, requestBody.mote_kommentar)
 		}
 
 		res.json({

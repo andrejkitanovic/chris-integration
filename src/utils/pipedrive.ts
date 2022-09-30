@@ -365,3 +365,14 @@ export const pipedriveDeleteActivitiy = async (activityId: string | number) => {
 
 	return data?.data;
 };
+
+// NOTES
+
+export const pipedriveCreateNote = async (dealId: number | string, content: string) => {
+	const { data } = await pipedriveAPI.post(`/notes`, {
+		content,
+		deal_id: dealId,
+	});
+
+	return data?.data;
+};

@@ -43,6 +43,10 @@ const postWebhookBookingCreated = (req, res, next) => __awaiter(void 0, void 0, 
         if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
             yield (0, pipedrive_1.pipedriveCreateActivity)(Object.assign(Object.assign({}, requestBody), { dealId: pipedriveDeal.id, creatorId: pipedriveCreator.id, userId: pipedriveContact.id }));
         }
+        // [PIPEDRIVE][NOTE] Create Note
+        if (pipedriveDeal && requestBody.mote_kommentar) {
+            yield (0, pipedrive_1.pipedriveCreateNote)(pipedriveDeal.id, requestBody.mote_kommentar);
+        }
         res.json({
             message: 'Success',
         });
