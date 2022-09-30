@@ -31,14 +31,16 @@ export const useGoogle = async (user: IUser) => {
 		});
 
 		if (data?.items) {
-			const findMeeting = data?.items?.find(
-				(item: any) => item.summary === 'Möte med Mersol' && dayjs(item.start.dateTime).diff(dayjs(meeting_time)) === 0
+			const findMeetings = data?.items?.filter(
+				(item: any) =>
+					item.summary.includes('Fri konsultation: Mersol') &&
+					dayjs(item.start.dateTime).diff(dayjs(meeting_time)) === 0
 			);
 
-			return findMeeting;
+			return findMeetings || [];
 		}
 
-		return data?.items;
+		return [];
 	};
 
 	const googleDeleteCalendarEvent = async (eventId: string) => {

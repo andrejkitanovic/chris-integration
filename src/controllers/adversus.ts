@@ -63,18 +63,6 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 		// [PIPEDRIVE][DEAL] Create
 		const pipedriveDeal = await pipedriveCreateDeal({ ...requestBody, pipedriveContactId: pipedriveContact?.id });
 
-		// [GOOGLE][MEETING] Find -> T: Delete | F: Pass
-		const user = await User.findOne({ email: requestBody.user_email });
-
-		if (user) {
-			const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
-			const meeting = await googleGetCalendarSearchEvent(requestBody.meeting_time);
-
-			if (meeting) {
-				await googleDeleteCalendarEvent(meeting.id);
-			}
-		}
-
 		// [PIPEDRIVE][ACTIVITY] Create Meeting
 		if (pipedriveDeal && pipedriveCreator && pipedriveContact) {
 			await pipedriveCreateActivity({
@@ -87,7 +75,7 @@ export const postWebhookBookingCreated: RequestHandler = async (req, res, next) 
 
 		// [PIPEDRIVE][NOTE] Create Note
 		if (pipedriveDeal && requestBody.mote_kommentar) {
-			await pipedriveCreateNote(pipedriveDeal.id, requestBody.mote_kommentar)
+			await pipedriveCreateNote(pipedriveDeal.id, requestBody.mote_kommentar);
 		}
 
 		res.json({
@@ -121,18 +109,6 @@ export const postWebhookBookingUpdated: RequestHandler = async (req, res, next) 
 
 		if (pipedriveDeal) {
 			await pipedriveUpdateDeal(pipedriveDeal?.id, requestBody);
-		}
-
-		// [GOOGLE][MEETING] Delete
-		const user = await User.findOne({ email: requestBody.user_email });
-
-		if (user) {
-			const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
-			const meeting = await googleGetCalendarSearchEvent(requestBody.meeting_time);
-
-			if (meeting) {
-				await googleDeleteCalendarEvent(meeting.id);
-			}
 		}
 
 		// [PIPEDRIVE][ACTIVITY] Update Meeting
@@ -188,11 +164,11 @@ export const postWebhookBookingDeleted: RequestHandler = async (req, res, next) 
 
 		if (user) {
 			const { googleGetCalendarSearchEvent, googleDeleteCalendarEvent } = await useGoogle(user);
-			const meeting = await googleGetCalendarSearchEvent(requestBody.meeting_time);
+			const meetings = await googleGetCalendarSearchEvent(requestBody.meeting_time);
 
-			if (meeting) {
+			meetings.forEach(async (meeting: any) => {
 				await googleDeleteCalendarEvent(meeting.id);
-			}
+			});
 		}
 
 		res.json({
