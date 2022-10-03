@@ -3,6 +3,7 @@ import { writeInFile } from 'helpers/writeInFile';
 import { pipedriveGetActivityById, pipedriveGetDealById, pipedriveSyncActivityUser } from 'utils/pipedrive';
 import {
 	trelloCreateComment,
+	trelloDeleteComment,
 	trelloGetCardComments,
 	trelloSearchCard,
 	trelloUpdateCard,
@@ -117,18 +118,35 @@ export type PipedriveNoteBody = {
 
 export const postWebhookNote: RequestHandler = async (req, res, next) => {
 	try {
-		const { current }: { current: PipedriveNoteBody } = req.body;
+		const { current, previous }: { current: PipedriveNoteBody | null; previous: PipedriveNoteBody | null } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
 
-		// [TRELLO][CARD] Find -> T: Update | F: Pass
-		const trelloCard = await trelloSearchCard(current.deal.title);
+		if (previous) {
+			// [TRELLO][CARD] Find -> T: Delete | F: Pass
+			const trelloCard = await trelloSearchCard(previous.deal.title);
 
-		// [TRELLO][COMMENT] Create
-		if (trelloCard) {
-			const trelloComments = (await trelloGetCardComments(trelloCard.id)).map((card: any) => card.data.text);
+			if (trelloCard) {
+				const trelloComment = (await trelloGetCardComments(trelloCard.id)).find(
+					(card: any) => card.data.text === previous.content
+				);
 
-			if (!trelloComments.some((comment: string) => comment === current.content)) {
-				await trelloCreateComment(trelloCard.id, current.content);
+				if (trelloComment) {
+					await trelloDeleteComment(trelloCard.id, trelloComment.id);
+				}
+			}
+		}
+
+		if (current) {
+			// [TRELLO][CARD] Find -> T: Update | F: Pass
+			const trelloCard = await trelloSearchCard(current.deal.title);
+
+			// [TRELLO][COMMENT] Create
+			if (trelloCard) {
+				const trelloComments = (await trelloGetCardComments(trelloCard.id)).map((card: any) => card.data.text);
+
+				if (!trelloComments.some((comment: string) => comment === current.content)) {
+					await trelloCreateComment(trelloCard.id, current.content);
+				}
 			}
 		}
 
