@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
+exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -42,11 +42,11 @@ const trelloCustomFieldsFormat = (body) => {
         '63370468acfe6205cae1b7ac': (_h = (_g = body === null || body === void 0 ? void 0 : body.person_name) === null || _g === void 0 ? void 0 : _g.split(' ')[1]) !== null && _h !== void 0 ? _h : '',
         '633704e56df6ca01205d85ad': (_k = (_j = body === null || body === void 0 ? void 0 : body.person_id) === null || _j === void 0 ? void 0 : _j.email[0].value) !== null && _k !== void 0 ? _k : '',
         '633704fe78625e0017de625d': (_m = (_l = body === null || body === void 0 ? void 0 : body.person_id) === null || _l === void 0 ? void 0 : _l.phone[0].value) !== null && _m !== void 0 ? _m : '',
-        '63370510b7016f01cf86959a': (_o = body["0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0"]) !== null && _o !== void 0 ? _o : "",
-        '6337051e5a9e3d0045e504e6': (_p = body["d5969b61ed60673aa3143a212214d698fdc73cbc"]) !== null && _p !== void 0 ? _p : "",
-        '633705294a7adf00d0530228': (_q = body["bda50d3b0dec33b4912759927970f53a140ed7f8"]) !== null && _q !== void 0 ? _q : "",
-        '6337053160b5c9029d964a91': (_r = body["ec565cf910b4ede8f17f61146ac4949c61b20860"]) !== null && _r !== void 0 ? _r : "",
-        '63370541ac93bf007756fc63': (_s = body["efdcb3fe17889df988d6f4ee668c65b14b05f276"]) !== null && _s !== void 0 ? _s : "", // Placering av elcentral/mätare
+        '63370510b7016f01cf86959a': (_o = body['0c711d5c32b9fe925888b7fc9b6bc287c60d1ed0']) !== null && _o !== void 0 ? _o : '',
+        '6337051e5a9e3d0045e504e6': (_p = body['d5969b61ed60673aa3143a212214d698fdc73cbc']) !== null && _p !== void 0 ? _p : '',
+        '633705294a7adf00d0530228': (_q = body['bda50d3b0dec33b4912759927970f53a140ed7f8']) !== null && _q !== void 0 ? _q : '',
+        '6337053160b5c9029d964a91': (_r = body['ec565cf910b4ede8f17f61146ac4949c61b20860']) !== null && _r !== void 0 ? _r : '',
+        '63370541ac93bf007756fc63': (_s = body['efdcb3fe17889df988d6f4ee668c65b14b05f276']) !== null && _s !== void 0 ? _s : '', // Placering av elcentral/mätare
     };
 };
 const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -123,3 +123,10 @@ const trelloCreateComment = (cardId, text) => __awaiter(void 0, void 0, void 0, 
     return data;
 });
 exports.trelloCreateComment = trelloCreateComment;
+const trelloDeleteComment = (cardId, commentId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId || !commentId)
+        return;
+    const { data } = yield trelloAPI.delete(`/1/cards/${cardId}/actions/${commentId}/comments`);
+    return data;
+});
+exports.trelloDeleteComment = trelloDeleteComment;

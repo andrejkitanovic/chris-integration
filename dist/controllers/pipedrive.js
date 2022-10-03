@@ -58,15 +58,27 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.postWebhookDeal = postWebhookDeal;
 const postWebhookNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { current } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
-        // [TRELLO][CARD] Find -> T: Update | F: Pass
-        const trelloCard = yield (0, trello_1.trelloSearchCard)(current.deal.title);
-        // [TRELLO][COMMENT] Create
-        if (trelloCard) {
-            const trelloComments = (yield (0, trello_1.trelloGetCardComments)(trelloCard.id)).map((card) => card.data.text);
-            if (!trelloComments.some((comment) => comment === current.content)) {
-                yield (0, trello_1.trelloCreateComment)(trelloCard.id, current.content);
+        const { current, previous } = req.body;
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify({ current, previous }) });
+        if (previous) {
+            // [TRELLO][CARD] Find -> T: Delete | F: Pass
+            const trelloCard = yield (0, trello_1.trelloSearchCard)(previous.deal.title);
+            if (trelloCard) {
+                const trelloComment = (yield (0, trello_1.trelloGetCardComments)(trelloCard.id)).find((card) => card.data.text === previous.content);
+                if (trelloComment) {
+                    yield (0, trello_1.trelloDeleteComment)(trelloCard.id, trelloComment.id);
+                }
+            }
+        }
+        if (current) {
+            // [TRELLO][CARD] Find -> T: Update | F: Pass
+            const trelloCard = yield (0, trello_1.trelloSearchCard)(current.deal.title);
+            // [TRELLO][COMMENT] Create
+            if (trelloCard) {
+                const trelloComments = (yield (0, trello_1.trelloGetCardComments)(trelloCard.id)).map((card) => card.data.text);
+                if (!trelloComments.some((comment) => comment === current.content)) {
+                    yield (0, trello_1.trelloCreateComment)(trelloCard.id, current.content);
+                }
             }
         }
         res.json({
