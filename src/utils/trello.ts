@@ -148,6 +148,6 @@ export const trelloCreateComment = async (cardId: string, text: string) => {
 export const trelloDeleteComment = async (cardId: string, commentId: string) => {
 	if (!cardId || !commentId) return;
 
-	const { data } = await trelloAPI.delete(`/1/cards/${cardId}/actions/${commentId}/comments'`);
+	const { data } = await trelloAPI.delete(`/1/cards/${cardId}/actions/${commentId}/comments`);
 	return data;
 };

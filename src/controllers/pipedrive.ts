@@ -119,7 +119,7 @@ export type PipedriveNoteBody = {
 export const postWebhookNote: RequestHandler = async (req, res, next) => {
 	try {
 		const { current, previous }: { current: PipedriveNoteBody | null; previous: PipedriveNoteBody | null } = req.body;
-		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify({ current, previous }) });
 
 		if (previous) {
 			// [TRELLO][CARD] Find -> T: Delete | F: Pass
