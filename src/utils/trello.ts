@@ -95,7 +95,7 @@ export const trelloUpdateCard = async (cardId: string, cardData: PipedriveDealTy
 	if (!cardId) return;
 
 	const card = trelloCardFormat(cardData);
-	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: process.env.TRELLO_LIST_ID, ...card });
+	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { ...card });
 	return data;
 };
 

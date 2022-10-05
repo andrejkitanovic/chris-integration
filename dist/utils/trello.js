@@ -75,7 +75,7 @@ const trelloUpdateCard = (cardId, cardData) => __awaiter(void 0, void 0, void 0,
     if (!cardId)
         return;
     const card = trelloCardFormat(cardData);
-    const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, card));
+    const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, Object.assign({}, card));
     return data;
 });
 exports.trelloUpdateCard = trelloUpdateCard;
