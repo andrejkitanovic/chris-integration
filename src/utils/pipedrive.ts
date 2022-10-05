@@ -208,7 +208,6 @@ export const pipedriveSearchDeal = async (name: string) => {
 
 	const { data } = await pipedriveAPI.get(`/deals/search`, {
 		params: {
-			stage_id: process.env.PIPEDRIVE_STAGE_ID,
 			term: name,
 			limit: 1,
 		},
@@ -235,7 +234,6 @@ export const pipedriveUpdateDeal = async (dealId: number | string, dealData: Adv
 
 	const deal = pipedriveDealFormat(dealData);
 	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
-		stage_id: process.env.PIPEDRIVE_STAGE_ID,
 		...deal,
 	});
 
