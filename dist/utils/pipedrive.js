@@ -122,7 +122,6 @@ const pipedriveSearchDeal = (name) => __awaiter(void 0, void 0, void 0, function
         return;
     const { data } = yield pipedriveAPI.get(`/deals/search`, {
         params: {
-            stage_id: process.env.PIPEDRIVE_STAGE_ID,
             term: name,
             limit: 1,
         },
@@ -143,7 +142,7 @@ const pipedriveUpdateDeal = (dealId, dealData) => __awaiter(void 0, void 0, void
     if (!dealId)
         return;
     const deal = pipedriveDealFormat(dealData);
-    const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, Object.assign({ stage_id: process.env.PIPEDRIVE_STAGE_ID }, deal));
+    const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, Object.assign({}, deal));
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateDeal = pipedriveUpdateDeal;
