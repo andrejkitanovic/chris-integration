@@ -37,14 +37,19 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.postWebhookActivity = postWebhookActivity;
+// Redo för säljmöte STAGE_ID = 3
 const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { current } = req.body;
+        const { current, previous } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current), req });
         // [PIPEDRIVE][DEAL] Sync User -> Activity User
         const pipedriveActivity = yield (0, pipedrive_1.pipedriveGetActivityById)(current.next_activity_id);
         if (pipedriveActivity && current.user_id !== pipedriveActivity.user_id) {
             yield (0, pipedrive_1.pipedriveSyncActivityUser)(current.next_activity_id, current.user_id);
+        }
+        // [PIPEDRIVE][DEAL] If new stage id is 3 move to HELD in adversus
+        if (previous.stage_id !== current.stage_id && current.stage_id === 3) {
+            //
         }
         res.json({
             message: 'Success',

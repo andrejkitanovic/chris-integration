@@ -68,10 +68,8 @@ exports.trelloGetCustomFieldsCard = trelloGetCustomFieldsCard;
 const trelloCreateCardWebhook = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const { data } = yield trelloAPI.post('https://api.trello.com/1/webhooks', {
         description: `Card ${id} Webhook`,
-        callbackURL: 'https://webhook.mersol.se/api/webhook',
+        callbackURL: 'https://webhook.mersol.se/api/trello/card',
         idModel: `${id}`,
-    }, {
-        params: {}
     });
     return data;
 });
@@ -79,6 +77,7 @@ exports.trelloCreateCardWebhook = trelloCreateCardWebhook;
 const trelloCreateCard = (cardData) => __awaiter(void 0, void 0, void 0, function* () {
     const card = trelloCardFormat(cardData);
     const { data } = yield trelloAPI.post(`/1/cards`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, card));
+    yield (0, exports.trelloCreateCardWebhook)(data.id);
     return data;
 });
 exports.trelloCreateCard = trelloCreateCard;

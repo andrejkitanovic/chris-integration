@@ -81,11 +81,13 @@ export type PipedriveDealBody = {
 	user_id: number;
 	notes_count: number;
 	title: string;
+	stage_id?: number;
 };
 
+// Redo för säljmöte STAGE_ID = 3
 export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 	try {
-		const { current }: { current: PipedriveDealBody } = req.body;
+		const { current, previous }: { current: PipedriveDealBody; previous: PipedriveDealBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current), req });
 
 		// [PIPEDRIVE][DEAL] Sync User -> Activity User
@@ -93,6 +95,11 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 
 		if (pipedriveActivity && current.user_id !== pipedriveActivity.user_id) {
 			await pipedriveSyncActivityUser(current.next_activity_id, current.user_id);
+		}
+
+		// [PIPEDRIVE][DEAL] If new stage id is 3 move to HELD in adversus
+		if (previous.stage_id !== current.stage_id && current.stage_id === 3) {
+			//
 		}
 
 		res.json({
