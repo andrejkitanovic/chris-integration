@@ -107,7 +107,7 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 			}
 			if (current.stage_id === 10 && trelloCard) {
 				// If new stage id is 10 move trello card to Double-check - FÄRDIG
-				await trelloMoveCard(trelloCard.id, '63201b19497752041b8df445');
+				await trelloMoveCard(trelloCard.id, '6322d967519c050472e8df7f');
 			}
 		}
 

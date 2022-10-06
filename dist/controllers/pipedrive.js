@@ -55,7 +55,7 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             }
             if (current.stage_id === 10 && trelloCard) {
                 // If new stage id is 10 move trello card to Double-check - FÄRDIG
-                yield (0, trello_1.trelloMoveCard)(trelloCard.id, '63201b19497752041b8df445');
+                yield (0, trello_1.trelloMoveCard)(trelloCard.id, '6322d967519c050472e8df7f');
             }
         }
         res.json({
