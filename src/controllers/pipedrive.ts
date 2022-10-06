@@ -44,7 +44,7 @@ export type PipedriveActivityBody = {
 export const postWebhookActivity: RequestHandler = async (req, res, next) => {
 	try {
 		const { current }: { current: PipedriveActivityBody } = req.body;
-		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current), req });
 
 		if (!current.deal_id) throw new Error();
 
@@ -86,7 +86,7 @@ export type PipedriveDealBody = {
 export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 	try {
 		const { current }: { current: PipedriveDealBody } = req.body;
-		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current), req });
 
 		// [PIPEDRIVE][DEAL] Sync User -> Activity User
 		const pipedriveActivity = await pipedriveGetActivityById(current.next_activity_id);
@@ -119,7 +119,7 @@ export type PipedriveNoteBody = {
 export const postWebhookNote: RequestHandler = async (req, res, next) => {
 	try {
 		const { current, previous }: { current: PipedriveNoteBody | null; previous: PipedriveNoteBody | null } = req.body;
-		await writeInFile({ path: 'logs/request.log', context: JSON.stringify({ current, previous }) });
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify({ current, previous }), req });
 
 		if (previous) {
 			// [TRELLO][CARD] Find -> T: Delete | F: Pass

@@ -13,7 +13,7 @@ exports.postWebhookLog = void 0;
 const writeInFile_1 = require("helpers/writeInFile");
 const postWebhookLog = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body) });
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(req.body), req });
         res.json({
             message: 'Logged',
         });

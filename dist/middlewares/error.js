@@ -13,7 +13,7 @@ const writeInFile_1 = require("helpers/writeInFile");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const error = (err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    yield (0, writeInFile_1.writeInFile)({ path: 'logs/error.log', context: JSON.stringify(err) });
+    yield (0, writeInFile_1.writeInFile)({ path: 'logs/error.log', context: JSON.stringify(err), req });
     const status = err.statusCode || 500;
     if ((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.data) {
         res.status(status).json(err.response.data);

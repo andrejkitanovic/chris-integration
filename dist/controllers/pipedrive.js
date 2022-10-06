@@ -16,7 +16,7 @@ const trello_1 = require("utils/trello");
 const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { current } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current), req });
         if (!current.deal_id)
             throw new Error();
         // [PIPEDRIVE][DEAL] Find
@@ -40,7 +40,7 @@ exports.postWebhookActivity = postWebhookActivity;
 const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { current } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current) });
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current), req });
         // [PIPEDRIVE][DEAL] Sync User -> Activity User
         const pipedriveActivity = yield (0, pipedrive_1.pipedriveGetActivityById)(current.next_activity_id);
         if (pipedriveActivity && current.user_id !== pipedriveActivity.user_id) {
@@ -59,7 +59,7 @@ exports.postWebhookDeal = postWebhookDeal;
 const postWebhookNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { current, previous } = req.body;
-        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify({ current, previous }) });
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify({ current, previous }), req });
         if (previous) {
             // [TRELLO][CARD] Find -> T: Delete | F: Pass
             const trelloCard = yield (0, trello_1.trelloSearchCard)(previous.deal.title);

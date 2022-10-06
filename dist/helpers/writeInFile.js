@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeInFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const dayjs_1 = __importDefault(require("dayjs"));
-const writeInFile = ({ path, context }) => __awaiter(void 0, void 0, void 0, function* () {
+const writeInFile = ({ path, context, req }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { method, baseUrl } = req;
         if (!context)
             return;
         let parsedContext = '****************\n';
+        parsedContext += `[${method}] ${baseUrl}\n`;
         parsedContext += `[${(0, dayjs_1.default)().format('HH:mm:ss DD/MM/YYYY')}]\n`;
         parsedContext += JSON.stringify(context) + '\n';
         parsedContext += '****************\n';
