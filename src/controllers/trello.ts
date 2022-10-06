@@ -25,7 +25,12 @@ export const postTrelloCard: RequestHandler = async (req, res, next) => {
 				await pipedriveCreateNote(deal.id, `[${attachment.url}] ${attachment.text}`);
 			}
 
-            // MOVE TO Redo för säljmöte
+			// [PIPEDRIVE] MOVE TO Redo för säljmöte
+		} else if (action?.type === 'updateCard') {
+
+			if (action?.data?.listAfter && action?.data?.listBefore && action?.data.listAfter.name === 'Double-check - FÄRDIG') {
+				// [PIPEDRIVE] MOVE TO Double-check Färdig
+			}
 		}
 
 		res.json({

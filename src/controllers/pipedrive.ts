@@ -106,8 +106,8 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 				// If new stage id is 3 move to HELD in adversus [NOT POSSIBLE ATM]
 			}
 			if (current.stage_id === 10 && trelloCard) {
-				// If new stage id is 10 move trello card to Double-check - FÄRDIG
-				await trelloMoveCard(trelloCard.id, '6322d967519c050472e8df7f');
+				// If new stage id is 10 move trello card to Double-check - BEHÖVS
+				await trelloMoveCard(trelloCard.id, '6322d940fd272403d017a3fe');
 			}
 		}
 

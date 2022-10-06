@@ -24,6 +24,7 @@ const getTrello = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getTrello = getTrello;
 const postTrelloCard = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const { action, model } = req.body;
         if ((action === null || action === void 0 ? void 0 : action.type) === 'addAttachmentToCard') {
@@ -32,7 +33,12 @@ const postTrelloCard = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             if (deal) {
                 yield (0, pipedrive_1.pipedriveCreateNote)(deal.id, `[${attachment.url}] ${attachment.text}`);
             }
-            // MOVE TO Redo för säljmöte
+            // [PIPEDRIVE] MOVE TO Redo för säljmöte
+        }
+        else if ((action === null || action === void 0 ? void 0 : action.type) === 'updateCard') {
+            if (((_a = action === null || action === void 0 ? void 0 : action.data) === null || _a === void 0 ? void 0 : _a.listAfter) && ((_b = action === null || action === void 0 ? void 0 : action.data) === null || _b === void 0 ? void 0 : _b.listBefore) && (action === null || action === void 0 ? void 0 : action.data.listAfter.name) === 'Double-check - FÄRDIG') {
+                // [PIPEDRIVE] MOVE TO Double-check Färdig
+            }
         }
         res.json({
             message: 'Success',
