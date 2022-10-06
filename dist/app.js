@@ -35,11 +35,13 @@ app.use('/logs/errors', express_1.default.static('logs/error.log'));
 (0, routes_1.default)(app);
 app.use(error_1.default);
 (0, connection_1.default)(app);
-// import { trelloSearchCard, trelloCreateCardWebhook } from 'utils/trello';
+// import { trelloCreateCardWebhook, trelloGetListCards } from 'utils/trello';
 // (async function () {
 // 	try {
-// 		const card = await trelloSearchCard('Andrej Kitanovic / KitanovicStreet 15 (CityK)');
-// 		console.log(await trelloCreateCardWebhook(card.id));
+// 		const cards = await trelloGetListCards();
+// 		cards.forEach(async (card: any) => {
+// 			return await trelloCreateCardWebhook(card.id);
+// 		});
 // 	} catch (err) {
 // 		console.log(err);
 // 	}

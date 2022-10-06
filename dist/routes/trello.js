@@ -10,7 +10,7 @@ const router = (0, express_1.Router)();
 (0, defineRoutes_1.default)(router, [
     {
         method: 'get',
-        route: '/',
+        route: '/card',
         controller: trello_1.getTrello,
     },
     {

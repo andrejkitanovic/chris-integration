@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
+exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = exports.trelloGetListCards = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -53,10 +53,11 @@ const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () 
     const { data } = yield trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
     return data;
 });
+exports.trelloGetListCards = trelloGetListCards;
 const trelloSearchCard = (name) => __awaiter(void 0, void 0, void 0, function* () {
     if (!name)
         return;
-    const cards = yield trelloGetListCards();
+    const cards = yield (0, exports.trelloGetListCards)();
     return cards.find((card) => card.name === name);
 });
 exports.trelloSearchCard = trelloSearchCard;
