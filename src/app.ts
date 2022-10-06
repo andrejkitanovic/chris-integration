@@ -38,12 +38,15 @@ app.use(errorMiddleware);
 
 connection(app);
 
-// import { trelloSearchCard, trelloCreateCardWebhook } from 'utils/trello';
+// import { trelloCreateCardWebhook, trelloGetListCards } from 'utils/trello';
 
 // (async function () {
 // 	try {
-// 		const card = await trelloSearchCard('Andrej Kitanovic / KitanovicStreet 15 (CityK)');
-// 		console.log(await trelloCreateCardWebhook(card.id));
+// 		const cards = await trelloGetListCards();
+
+// 		cards.forEach(async (card: any) => {
+// 			return await trelloCreateCardWebhook(card.id);
+// 		});
 // 	} catch (err) {
 // 		console.log(err);
 // 	}

@@ -67,7 +67,7 @@ const trelloCustomFieldsFormat = (body: PipedriveDealType): TrelloCardCustomFiel
 	};
 };
 
-const trelloGetListCards = async () => {
+export const trelloGetListCards = async () => {
 	const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
 
 	return data;

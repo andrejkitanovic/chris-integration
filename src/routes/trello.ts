@@ -6,7 +6,7 @@ const router = Router();
 defineRoutes(router, [
 	{
 		method: 'get',
-		route: '/',
+		route: '/card',
 		controller: getTrelloController,
 	},
 	{
