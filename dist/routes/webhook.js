@@ -9,6 +9,11 @@ const webhook_1 = require("controllers/webhook");
 const router = (0, express_1.Router)();
 (0, defineRoutes_1.default)(router, [
     {
+        method: 'get',
+        route: '/',
+        controller: webhook_1.postWebhookLog,
+    },
+    {
         method: 'post',
         route: '/',
         controller: webhook_1.postWebhookLog,

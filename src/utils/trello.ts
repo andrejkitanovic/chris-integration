@@ -85,6 +85,18 @@ export const trelloGetCustomFieldsCard = async (cardId: string) => {
 	return data;
 };
 
+export const trelloCreateCardWebhook = async (id: string) => {
+	const { data } = await trelloAPI.post('https://api.trello.com/1/webhooks', {
+		description: `Card ${id} Webhook`,
+		callbackURL: 'https://webhook.mersol.se/api/webhook',
+		idModel: `${id}`,
+	}, {
+		params: {}
+	});
+
+	return data;
+};
+
 export const trelloCreateCard = async (cardData: PipedriveDealType) => {
 	const card = trelloCardFormat(cardData);
 	const { data } = await trelloAPI.post(`/1/cards`, { idList: process.env.TRELLO_LIST_ID, ...card });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
+exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -65,6 +65,17 @@ const trelloGetCustomFieldsCard = (cardId) => __awaiter(void 0, void 0, void 0, 
     return data;
 });
 exports.trelloGetCustomFieldsCard = trelloGetCustomFieldsCard;
+const trelloCreateCardWebhook = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield trelloAPI.post('https://api.trello.com/1/webhooks', {
+        description: `Card ${id} Webhook`,
+        callbackURL: 'https://webhook.mersol.se/api/webhook',
+        idModel: `${id}`,
+    }, {
+        params: {}
+    });
+    return data;
+});
+exports.trelloCreateCardWebhook = trelloCreateCardWebhook;
 const trelloCreateCard = (cardData) => __awaiter(void 0, void 0, void 0, function* () {
     const card = trelloCardFormat(cardData);
     const { data } = yield trelloAPI.post(`/1/cards`, Object.assign({ idList: process.env.TRELLO_LIST_ID }, card));
