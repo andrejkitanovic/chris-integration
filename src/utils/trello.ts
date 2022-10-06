@@ -67,6 +67,12 @@ const trelloCustomFieldsFormat = (body: PipedriveDealType): TrelloCardCustomFiel
 	};
 };
 
+export const trelloGetLists = async () => {
+	const { data } = await trelloAPI.get(`/1/boards/${process.env.TRELLO_BOARD_ID}/lists`);
+
+	return data;
+}
+
 export const trelloGetListCards = async () => {
 	const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
 
@@ -108,6 +114,13 @@ export const trelloUpdateCard = async (cardId: string, cardData: PipedriveDealTy
 
 	const card = trelloCardFormat(cardData);
 	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { ...card });
+	return data;
+};
+
+export const trelloMoveCard = async (cardId: string, listId: string) => {
+	if (!cardId || !listId) return;
+
+	const { data } = await trelloAPI.put(`/1/cards/${cardId}`, { idList: listId });
 	return data;
 };
 

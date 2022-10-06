@@ -37,17 +37,3 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
-
-// import { trelloCreateCardWebhook, trelloGetListCards } from 'utils/trello';
-
-// (async function () {
-// 	try {
-// 		const cards = await trelloGetListCards();
-
-// 		cards.forEach(async (card: any) => {
-// 			return await trelloCreateCardWebhook(card.id);
-// 		});
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// })();

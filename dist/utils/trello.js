@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = exports.trelloGetListCards = void 0;
+exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloMoveCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = exports.trelloGetListCards = exports.trelloGetLists = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -49,6 +49,11 @@ const trelloCustomFieldsFormat = (body) => {
         '63370541ac93bf007756fc63': (_s = body['efdcb3fe17889df988d6f4ee668c65b14b05f276']) !== null && _s !== void 0 ? _s : '', // Placering av elcentral/mätare
     };
 };
+const trelloGetLists = () => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield trelloAPI.get(`/1/boards/${process.env.TRELLO_BOARD_ID}/lists`);
+    return data;
+});
+exports.trelloGetLists = trelloGetLists;
 const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () {
     const { data } = yield trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
     return data;
@@ -90,6 +95,13 @@ const trelloUpdateCard = (cardId, cardData) => __awaiter(void 0, void 0, void 0,
     return data;
 });
 exports.trelloUpdateCard = trelloUpdateCard;
+const trelloMoveCard = (cardId, listId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!cardId || !listId)
+        return;
+    const { data } = yield trelloAPI.put(`/1/cards/${cardId}`, { idList: listId });
+    return data;
+});
+exports.trelloMoveCard = trelloMoveCard;
 const trelloUpdateCustomFieldsCard = (cardId, customFieldsData) => __awaiter(void 0, void 0, void 0, function* () {
     if (!cardId)
         return;

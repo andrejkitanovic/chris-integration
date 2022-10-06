@@ -5,6 +5,7 @@ import {
 	trelloCreateComment,
 	trelloDeleteComment,
 	trelloGetCardComments,
+	trelloMoveCard,
 	trelloSearchCard,
 	trelloUpdateCard,
 	trelloUpdateCustomFieldsCard,
@@ -97,9 +98,17 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 			await pipedriveSyncActivityUser(current.next_activity_id, current.user_id);
 		}
 
-		// [PIPEDRIVE][DEAL] If new stage id is 3 move to HELD in adversus
-		if (previous.stage_id !== current.stage_id && current.stage_id === 3) {
-			//
+		// [PIPEDRIVE][DEAL] If Changed state
+		if (previous.stage_id !== current.stage_id) {
+			const trelloCard = await trelloSearchCard(current.title);
+
+			if (current.stage_id === 3 && trelloCard) {
+				// If new stage id is 3 move to HELD in adversus [NOT POSSIBLE ATM]
+			}
+			if (current.stage_id === 10 && trelloCard) {
+				// If new stage id is 10 move trello card to Double-check - FÄRDIG
+				await trelloMoveCard(trelloCard.id, '63201b19497752041b8df445');
+			}
 		}
 
 		res.json({
