@@ -71,7 +71,7 @@ export const trelloGetLists = async () => {
 	const { data } = await trelloAPI.get(`/1/boards/${process.env.TRELLO_BOARD_ID}/lists`);
 
 	return data;
-}
+};
 
 export const trelloGetListCards = async () => {
 	const { data } = await trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
@@ -147,10 +147,25 @@ export const trelloUpdateCustomFieldsCard = async (cardId: string, customFieldsD
 	return;
 };
 
+export const trelloSearchAndDeleteCardWebhook = async (id: string) => {
+	const { data } = await trelloAPI.get('/1/members/me/tokens?webhooks=true');
+	const webhooks = data[0].webhooks;
+
+	const cardWebhook = webhooks.find(({ idModel }: { idModel: string }) => idModel === id);
+
+	if (cardWebhook) {
+		await trelloAPI.delete(`/1/webhooks/${cardWebhook.id}`);
+	}
+
+	return cardWebhook;
+};
+
 export const trelloDeleteCard = async (cardId: string) => {
 	if (!cardId) return;
 
 	const { data } = await trelloAPI.delete(`/1/cards/${cardId}`);
+	await trelloSearchAndDeleteCardWebhook(cardId);
+
 	return data;
 };
 

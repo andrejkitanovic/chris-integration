@@ -240,6 +240,16 @@ export const pipedriveUpdateDeal = async (dealId: number | string, dealData: Adv
 	return data?.data;
 };
 
+export const pipedriveUpdateDealStage = async (dealId: number | string, stageId: number | string) => {
+	if (!dealId || !stageId) return;
+
+	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {
+		stage_id: stageId,
+	});
+
+	return data?.data;
+};
+
 // export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
 // 	if (!dealId || !ownerId) return;
 

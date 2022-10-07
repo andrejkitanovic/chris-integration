@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveCreateNote = exports.pipedriveDeleteActivitiy = exports.pipedriveSyncActivityUser = exports.pipedriveUpdateActivity = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveGetActivityById = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveCreateNote = exports.pipedriveDeleteActivitiy = exports.pipedriveSyncActivityUser = exports.pipedriveUpdateActivity = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveGetActivityById = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDealStage = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -146,6 +146,15 @@ const pipedriveUpdateDeal = (dealId, dealData) => __awaiter(void 0, void 0, void
     return data === null || data === void 0 ? void 0 : data.data;
 });
 exports.pipedriveUpdateDeal = pipedriveUpdateDeal;
+const pipedriveUpdateDealStage = (dealId, stageId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId || !stageId)
+        return;
+    const { data } = yield pipedriveAPI.put(`/deals/${dealId}`, {
+        stage_id: stageId,
+    });
+    return data === null || data === void 0 ? void 0 : data.data;
+});
+exports.pipedriveUpdateDealStage = pipedriveUpdateDealStage;
 // export const pipedriveSyncDealOwner = async (dealId: number | string, ownerId: number | string) => {
 // 	if (!dealId || !ownerId) return;
 // 	const { data } = await pipedriveAPI.put(`/deals/${dealId}`, {

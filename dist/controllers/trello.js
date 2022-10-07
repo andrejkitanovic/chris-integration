@@ -27,17 +27,25 @@ const postTrelloCard = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     var _a, _b;
     try {
         const { action, model } = req.body;
+        const deal = yield (0, pipedrive_1.pipedriveSearchDeal)(model === null || model === void 0 ? void 0 : model.name);
         if ((action === null || action === void 0 ? void 0 : action.type) === 'addAttachmentToCard') {
             const attachment = action.display.entities.attachment;
-            const deal = yield (0, pipedrive_1.pipedriveSearchDeal)(model.name);
             if (deal) {
                 yield (0, pipedrive_1.pipedriveCreateNote)(deal.id, `[${attachment.url}] ${attachment.text}`);
+                // [PIPEDRIVE] MOVE TO Redo för säljmöte
+                if (deal.stage_id === 2) {
+                    yield (0, pipedrive_1.pipedriveUpdateDealStage)(deal.id, 7);
+                }
             }
-            // [PIPEDRIVE] MOVE TO Redo för säljmöte
         }
         else if ((action === null || action === void 0 ? void 0 : action.type) === 'updateCard') {
-            if (((_a = action === null || action === void 0 ? void 0 : action.data) === null || _a === void 0 ? void 0 : _a.listAfter) && ((_b = action === null || action === void 0 ? void 0 : action.data) === null || _b === void 0 ? void 0 : _b.listBefore) && (action === null || action === void 0 ? void 0 : action.data.listAfter.name) === 'Double-check - FÄRDIG') {
-                // [PIPEDRIVE] MOVE TO Double-check Färdig
+            if (((_a = action === null || action === void 0 ? void 0 : action.data) === null || _a === void 0 ? void 0 : _a.listAfter) &&
+                ((_b = action === null || action === void 0 ? void 0 : action.data) === null || _b === void 0 ? void 0 : _b.listBefore) &&
+                (action === null || action === void 0 ? void 0 : action.data.listAfter.name) === 'Double-check - FÄRDIG') {
+                if (deal) {
+                    // [PIPEDRIVE] MOVE TO Double-check Färdig
+                    yield (0, pipedrive_1.pipedriveUpdateDealStage)(deal.id, 11);
+                }
             }
         }
         res.json({

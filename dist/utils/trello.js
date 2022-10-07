@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloUpdateCustomFieldsCard = exports.trelloMoveCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = exports.trelloGetListCards = exports.trelloGetLists = void 0;
+exports.trelloDeleteComment = exports.trelloCreateComment = exports.trelloGetCardComments = exports.trelloDeleteCard = exports.trelloSearchAndDeleteCardWebhook = exports.trelloUpdateCustomFieldsCard = exports.trelloMoveCard = exports.trelloUpdateCard = exports.trelloCreateCard = exports.trelloCreateCardWebhook = exports.trelloGetCustomFieldsCard = exports.trelloSearchCard = exports.trelloGetListCards = exports.trelloGetLists = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const trelloAPI = axios_1.default.create({
@@ -124,10 +124,21 @@ const trelloUpdateCustomFieldsCard = (cardId, customFieldsData) => __awaiter(voi
     return;
 });
 exports.trelloUpdateCustomFieldsCard = trelloUpdateCustomFieldsCard;
+const trelloSearchAndDeleteCardWebhook = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield trelloAPI.get('/1/members/me/tokens?webhooks=true');
+    const webhooks = data[0].webhooks;
+    const cardWebhook = webhooks.find(({ idModel }) => idModel === id);
+    if (cardWebhook) {
+        yield trelloAPI.delete(`/1/webhooks/${cardWebhook.id}`);
+    }
+    return cardWebhook;
+});
+exports.trelloSearchAndDeleteCardWebhook = trelloSearchAndDeleteCardWebhook;
 const trelloDeleteCard = (cardId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!cardId)
         return;
     const { data } = yield trelloAPI.delete(`/1/cards/${cardId}`);
+    yield (0, exports.trelloSearchAndDeleteCardWebhook)(cardId);
     return data;
 });
 exports.trelloDeleteCard = trelloDeleteCard;
