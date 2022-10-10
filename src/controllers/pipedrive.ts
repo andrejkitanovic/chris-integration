@@ -1,6 +1,14 @@
+import dayjs from 'dayjs';
 import { RequestHandler } from 'express';
 import { writeInFile } from 'helpers/writeInFile';
-import { pipedriveGetActivityById, pipedriveGetDealById, pipedriveSyncActivityUser } from 'utils/pipedrive';
+import { adversusSeachBooking, adversusUpdateBooking } from 'utils/adversus';
+import {
+	pipedriveGetActivityById,
+	pipedriveGetActivityDealById,
+	pipedriveGetDealById,
+	pipedriveSyncActivityUser,
+	pipedriveUpdateDealStage,
+} from 'utils/pipedrive';
 import {
 	trelloCreateComment,
 	trelloDeleteCard,
@@ -106,10 +114,33 @@ export const postWebhookDeal: RequestHandler = async (req, res, next) => {
 
 				if (current?.stage_id === 3 && trelloCard) {
 					// If new stage id is 3 move to HELD in adversus [NOT POSSIBLE ATM]
+
+					const formatDate = dayjs(`${pipedriveActivity.due_date} ${pipedriveActivity.due_time}`)
+						.add(2, 'hour')
+						.toISOString()
+						.replace('.000Z', 'Z');
+					const adversusBooking = await adversusSeachBooking(formatDate);
+
+					if (adversusBooking) {
+						await adversusUpdateBooking(adversusBooking.id);
+					}
 				}
 				if (current?.stage_id === 10 && trelloCard) {
 					// If new stage id is 10 move trello card to Double-check - BEHÖVS
 					await trelloMoveCard(trelloCard.id, '6322d940fd272403d017a3fe');
+				}
+
+				if (current?.stage_id === 4) {
+					const activities = await pipedriveGetActivityDealById(current.id);
+
+					if (activities && activities.related_objects && activities.related_objects['deal']) {
+						// The contract is signed by person. Deal is moved to “Avtal signerat”.
+						if (Object.values(activities.related_objects['deal']).find((deal) => Boolean(deal))) {
+							await pipedriveUpdateDealStage(current.id, 5);
+							// Move the Trello card to another column “Avtal signerat - Projekt redo
+							await trelloMoveCard(trelloCard.id, '63297f5c7b90be017b4bac3f');
+						}
+					}
 				}
 			}
 		} else if (previous) {

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipedriveCreateNote = exports.pipedriveDeleteActivitiy = exports.pipedriveSyncActivityUser = exports.pipedriveUpdateActivity = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveGetActivityById = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDealStage = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
+exports.pipedriveCreateNote = exports.pipedriveDeleteActivitiy = exports.pipedriveSyncActivityUser = exports.pipedriveUpdateActivity = exports.pipedriveCreateActivity = exports.pipedriveSearchActivity = exports.pipedriveGetActivityById = exports.pipedriveDeleteDeal = exports.pipedriveUpdateDealStage = exports.pipedriveUpdateDeal = exports.pipedriveCreateDeal = exports.pipedriveSearchDeal = exports.pipedriveGetActivityDealById = exports.pipedriveGetDealById = exports.pipedriveUpdateContact = exports.pipedriveCreateContact = exports.pipedriveSearchContact = exports.pipedriveGetContacts = exports.pipedriveSearchUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const pipedriveAPI = axios_1.default.create({
@@ -117,6 +117,16 @@ const pipedriveGetDealById = (dealId) => __awaiter(void 0, void 0, void 0, funct
     return;
 });
 exports.pipedriveGetDealById = pipedriveGetDealById;
+const pipedriveGetActivityDealById = (dealId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!dealId)
+        return;
+    const { data } = yield pipedriveAPI.get(`/deals/${dealId}`);
+    if (data === null || data === void 0 ? void 0 : data.data) {
+        return data.data;
+    }
+    return;
+});
+exports.pipedriveGetActivityDealById = pipedriveGetActivityDealById;
 const pipedriveSearchDeal = (name) => __awaiter(void 0, void 0, void 0, function* () {
     var _d, _e;
     if (!name)

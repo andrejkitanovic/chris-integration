@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeInFile = void 0;
+exports.writeInFileSimple = exports.writeInFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const dayjs_1 = __importDefault(require("dayjs"));
 const writeInFile = ({ path, context, req }) => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,3 +37,23 @@ const writeInFile = ({ path, context, req }) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.writeInFile = writeInFile;
+const writeInFileSimple = ({ path, context }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!context)
+            return;
+        let parsedContext = '****************\n';
+        parsedContext += `[${(0, dayjs_1.default)().format('HH:mm:ss DD/MM/YYYY')}]\n`;
+        parsedContext += JSON.stringify(context) + '\n';
+        parsedContext += '****************\n';
+        fs_1.default.appendFile(path, parsedContext, (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+exports.writeInFileSimple = writeInFileSimple;

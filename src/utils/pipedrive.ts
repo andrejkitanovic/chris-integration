@@ -204,6 +204,17 @@ export const pipedriveGetDealById = async (dealId: number) => {
 	return;
 };
 
+export const pipedriveGetActivityDealById = async (dealId: number) => {
+	if (!dealId) return;
+
+	const { data } = await pipedriveAPI.get(`/deals/${dealId}`);
+
+	if (data?.data) {
+		return data.data;
+	}
+	return;
+};
+
 export const pipedriveSearchDeal = async (name: string) => {
 	if (!name) return;
 

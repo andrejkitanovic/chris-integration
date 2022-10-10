@@ -11,18 +11,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adversusChangeBooking = void 0;
+exports.adversusUpdateBooking = exports.adversusSeachBooking = void 0;
 const axios_1 = __importDefault(require("axios"));
+const writeInFile_1 = require("helpers/writeInFile");
 const adversusAPI = axios_1.default.create({
     baseURL: 'https://api.adversus.dk/v1',
     auth: {
-        username: 'christian@mersol.se',
-        password: "Plznohack123#",
+        username: (_a = process.env.ADVERSUS_USERNAME) !== null && _a !== void 0 ? _a : '',
+        password: (_b = process.env.ADVERSUS_PASSWORD) !== null && _b !== void 0 ? _b : '',
     },
 });
-const adversusChangeBooking = () => __awaiter(void 0, void 0, void 0, function* () {
-    const { data } = yield adversusAPI.get(`/organization`);
+const adversusSeachBooking = (meetTime) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    const { data } = yield adversusAPI.get(`/appointments`);
+    yield (0, writeInFile_1.writeInFileSimple)({ path: 'logs/test.log', context: JSON.stringify(data === null || data === void 0 ? void 0 : data.appointments) });
+    return (_c = data === null || data === void 0 ? void 0 : data.appointments) === null || _c === void 0 ? void 0 : _c.find((appointment) => appointment.start === meetTime);
+});
+exports.adversusSeachBooking = adversusSeachBooking;
+const adversusUpdateBooking = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const { data } = yield adversusAPI.patch(`/appointments/${id}`, {
+        status: 'held',
+        feedbackStatus: 'notInterested',
+    });
     return { data };
 });
-exports.adversusChangeBooking = adversusChangeBooking;
+exports.adversusUpdateBooking = adversusUpdateBooking;

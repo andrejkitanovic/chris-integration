@@ -8,9 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postWebhookNote = exports.postWebhookDeal = exports.postWebhookActivity = void 0;
+const dayjs_1 = __importDefault(require("dayjs"));
 const writeInFile_1 = require("helpers/writeInFile");
+const adversus_1 = require("utils/adversus");
 const pipedrive_1 = require("utils/pipedrive");
 const trello_1 = require("utils/trello");
 const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,10 +58,29 @@ const postWebhookDeal = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 const trelloCard = yield (0, trello_1.trelloSearchCard)(current.title);
                 if ((current === null || current === void 0 ? void 0 : current.stage_id) === 3 && trelloCard) {
                     // If new stage id is 3 move to HELD in adversus [NOT POSSIBLE ATM]
+                    const formatDate = (0, dayjs_1.default)(`${pipedriveActivity.due_date} ${pipedriveActivity.due_time}`)
+                        .add(2, 'hour')
+                        .toISOString()
+                        .replace('.000Z', 'Z');
+                    const adversusBooking = yield (0, adversus_1.adversusSeachBooking)(formatDate);
+                    if (adversusBooking) {
+                        yield (0, adversus_1.adversusUpdateBooking)(adversusBooking.id);
+                    }
                 }
                 if ((current === null || current === void 0 ? void 0 : current.stage_id) === 10 && trelloCard) {
                     // If new stage id is 10 move trello card to Double-check - BEHÖVS
                     yield (0, trello_1.trelloMoveCard)(trelloCard.id, '6322d940fd272403d017a3fe');
+                }
+                if ((current === null || current === void 0 ? void 0 : current.stage_id) === 4) {
+                    const activities = yield (0, pipedrive_1.pipedriveGetActivityDealById)(current.id);
+                    if (activities && activities.related_objects && activities.related_objects['deal']) {
+                        // The contract is signed by person. Deal is moved to “Avtal signerat”.
+                        if (Object.values(activities.related_objects['deal']).find((deal) => Boolean(deal))) {
+                            yield (0, pipedrive_1.pipedriveUpdateDealStage)(current.id, 5);
+                            // Move the Trello card to another column “Avtal signerat - Projekt redo
+                            yield (0, trello_1.trelloMoveCard)(trelloCard.id, '63297f5c7b90be017b4bac3f');
+                        }
+                    }
                 }
             }
         }
