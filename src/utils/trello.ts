@@ -181,7 +181,7 @@ export const trelloGetCardComments = async (cardId: string) => {
 export const trelloCreateComment = async (cardId: string, text: string) => {
 	if (!cardId || !text) return;
 
-	const { data } = await trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${text}`);
+	const { data } = await trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${encodeURIComponent(text)}`);
 	return data;
 };
 

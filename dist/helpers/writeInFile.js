@@ -21,7 +21,7 @@ const writeInFile = ({ path, context, req }) => __awaiter(void 0, void 0, void 0
         if (!context)
             return;
         let parsedContext = '****************\n';
-        parsedContext += `[${method}] ${baseUrl} ${reqPath}\n`;
+        parsedContext += `[${method}] ${baseUrl}${reqPath}\n`;
         parsedContext += `[${(0, dayjs_1.default)().format('HH:mm:ss DD/MM/YYYY')}]\n`;
         parsedContext += JSON.stringify(context) + '\n';
         parsedContext += '****************\n';

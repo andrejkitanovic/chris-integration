@@ -153,7 +153,7 @@ exports.trelloGetCardComments = trelloGetCardComments;
 const trelloCreateComment = (cardId, text) => __awaiter(void 0, void 0, void 0, function* () {
     if (!cardId || !text)
         return;
-    const { data } = yield trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${text}`);
+    const { data } = yield trelloAPI.post(`/1/cards/${cardId}/actions/comments?text=${encodeURIComponent(text)}`);
     return data;
 });
 exports.trelloCreateComment = trelloCreateComment;

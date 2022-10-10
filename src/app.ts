@@ -37,3 +37,14 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
+
+import {trelloCreateComment} from 'utils/trello'
+
+(async function(){
+	try{
+
+		await trelloCreateComment("631a136dfff08601a469c9b9", "[https://drive.google.com/file/d/1jBmc4Nim95fxwqYda1DR_AjaABLJxjSV/view?usp=drive_web] Energiberäkning - Daniel Zazi - 19,75 kWp (Huawei).pdf")
+	}catch(err){
+		console.log(err)
+	}
+}())
