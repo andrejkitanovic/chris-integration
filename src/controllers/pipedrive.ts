@@ -48,17 +48,17 @@ export const postWebhookActivity: RequestHandler = async (req, res, next) => {
 		const { current }: { current: PipedriveActivityBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current), req });
 
-		if (!current.deal_id) throw new Error();
+		if (current.deal_id) {
+			// [PIPEDRIVE][DEAL] Find
+			const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
 
-		// [PIPEDRIVE][DEAL] Find
-		const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
+			// [TRELLO][CARD] Find -> T: Update | F: Pass
+			const trelloCard = await trelloSearchCard(pipedriveDeal.title);
 
-		// [TRELLO][CARD] Find -> T: Update | F: Pass
-		const trelloCard = await trelloSearchCard(pipedriveDeal.title);
-
-		if (trelloCard) {
-			await trelloUpdateCard(trelloCard.id, pipedriveDeal);
-			await trelloUpdateCustomFieldsCard(trelloCard.id, pipedriveDeal);
+			if (trelloCard) {
+				await trelloUpdateCard(trelloCard.id, pipedriveDeal);
+				await trelloUpdateCustomFieldsCard(trelloCard.id, pipedriveDeal);
+			}
 		}
 
 		res.json({

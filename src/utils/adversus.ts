@@ -8,7 +8,7 @@ const adversusAPI = axios.create({
 	},
 });
 
-export const adversusGetAppoitments = async () => {
+export const adversusChangeBooking = async () => {
 	const { data } = await adversusAPI.get(`/organization`);
 	return { data };
 };

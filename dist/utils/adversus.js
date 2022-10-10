@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adversusGetAppoitments = void 0;
+exports.adversusChangeBooking = void 0;
 const axios_1 = __importDefault(require("axios"));
 const adversusAPI = axios_1.default.create({
     baseURL: 'https://api.adversus.dk/v1',
@@ -21,8 +21,8 @@ const adversusAPI = axios_1.default.create({
         password: "Plznohack123#",
     },
 });
-const adversusGetAppoitments = () => __awaiter(void 0, void 0, void 0, function* () {
+const adversusChangeBooking = () => __awaiter(void 0, void 0, void 0, function* () {
     const { data } = yield adversusAPI.get(`/organization`);
     return { data };
 });
-exports.adversusGetAppoitments = adversusGetAppoitments;
+exports.adversusChangeBooking = adversusChangeBooking;

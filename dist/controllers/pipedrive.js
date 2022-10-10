@@ -17,15 +17,15 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current), req });
-        if (!current.deal_id)
-            throw new Error();
-        // [PIPEDRIVE][DEAL] Find
-        const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
-        // [TRELLO][CARD] Find -> T: Update | F: Pass
-        const trelloCard = yield (0, trello_1.trelloSearchCard)(pipedriveDeal.title);
-        if (trelloCard) {
-            yield (0, trello_1.trelloUpdateCard)(trelloCard.id, pipedriveDeal);
-            yield (0, trello_1.trelloUpdateCustomFieldsCard)(trelloCard.id, pipedriveDeal);
+        if (current.deal_id) {
+            // [PIPEDRIVE][DEAL] Find
+            const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
+            // [TRELLO][CARD] Find -> T: Update | F: Pass
+            const trelloCard = yield (0, trello_1.trelloSearchCard)(pipedriveDeal.title);
+            if (trelloCard) {
+                yield (0, trello_1.trelloUpdateCard)(trelloCard.id, pipedriveDeal);
+                yield (0, trello_1.trelloUpdateCustomFieldsCard)(trelloCard.id, pipedriveDeal);
+            }
         }
         res.json({
             message: 'Success',
