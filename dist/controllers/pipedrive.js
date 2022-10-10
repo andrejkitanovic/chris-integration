@@ -17,7 +17,7 @@ const postWebhookActivity = (req, res, next) => __awaiter(void 0, void 0, void 0
     try {
         const { current } = req.body;
         yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify(current), req });
-        if (current.deal_id) {
+        if (current === null || current === void 0 ? void 0 : current.deal_id) {
             // [PIPEDRIVE][DEAL] Find
             const pipedriveDeal = yield (0, pipedrive_1.pipedriveGetDealById)(current.deal_id);
             // [TRELLO][CARD] Find -> T: Update | F: Pass

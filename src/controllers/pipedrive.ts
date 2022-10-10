@@ -48,7 +48,7 @@ export const postWebhookActivity: RequestHandler = async (req, res, next) => {
 		const { current }: { current: PipedriveActivityBody } = req.body;
 		await writeInFile({ path: 'logs/request.log', context: JSON.stringify(current), req });
 
-		if (current.deal_id) {
+		if (current?.deal_id) {
 			// [PIPEDRIVE][DEAL] Find
 			const pipedriveDeal = await pipedriveGetDealById(current.deal_id);
 

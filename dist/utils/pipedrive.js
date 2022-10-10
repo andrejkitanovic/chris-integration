@@ -39,6 +39,7 @@ const pipedriveSearchUser = (email) => __awaiter(void 0, void 0, void 0, functio
 exports.pipedriveSearchUser = pipedriveSearchUser;
 // CONTACTS
 const pipedriveContactFormat = (body) => {
+    console.log('EMAIL:', body.epost);
     return {
         name: body.namn,
         email: [{ value: body.epost, primary: true, label: 'work' }],

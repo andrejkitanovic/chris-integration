@@ -115,6 +115,7 @@ export const pipedriveSearchUser = async (email: string) => {
 // CONTACTS
 
 const pipedriveContactFormat = (body: AdversusBody): PipedriveContactType => {
+	console.log('EMAIL:', body.epost);
 	return {
 		name: body.namn,
 		email: [{ value: body.epost, primary: true, label: 'work' }],

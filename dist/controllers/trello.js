@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postTrelloCard = exports.getTrello = void 0;
+const writeInFile_1 = require("helpers/writeInFile");
 const pipedrive_1 = require("utils/pipedrive");
 const getTrello = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -27,6 +28,7 @@ const postTrelloCard = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     var _a, _b;
     try {
         const { action, model } = req.body;
+        yield (0, writeInFile_1.writeInFile)({ path: 'logs/request.log', context: JSON.stringify({ action, model }), req });
         const deal = yield (0, pipedrive_1.pipedriveSearchDeal)(model === null || model === void 0 ? void 0 : model.name);
         if ((action === null || action === void 0 ? void 0 : action.type) === 'addAttachmentToCard') {
             const attachment = action.display.entities.attachment;

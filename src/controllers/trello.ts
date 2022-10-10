@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import { writeInFile } from 'helpers/writeInFile';
 import { pipedriveCreateNote, pipedriveSearchDeal, pipedriveUpdateDealStage } from 'utils/pipedrive';
 
 export const getTrello: RequestHandler = async (req, res, next) => {
@@ -15,6 +16,7 @@ export const getTrello: RequestHandler = async (req, res, next) => {
 export const postTrelloCard: RequestHandler = async (req, res, next) => {
 	try {
 		const { action, model } = req.body;
+		await writeInFile({ path: 'logs/request.log', context: JSON.stringify({ action, model }), req });
 
 		const deal = await pipedriveSearchDeal(model?.name);
 
