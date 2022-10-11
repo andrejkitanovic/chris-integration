@@ -32,7 +32,7 @@ const postTrelloCard = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const deal = yield (0, pipedrive_1.pipedriveSearchDeal)(model === null || model === void 0 ? void 0 : model.name);
         if ((action === null || action === void 0 ? void 0 : action.type) === 'addAttachmentToCard') {
             const attachment = action.display.entities.attachment;
-            if (deal) {
+            if (deal && attachment.url.includes('.pdf')) {
                 yield (0, pipedrive_1.pipedriveCreateNote)(deal.id, `[${attachment.url}] ${attachment.text}`);
                 // [PIPEDRIVE] MOVE TO Redo för säljmöte
                 if (deal.stage_id === 2) {

@@ -23,7 +23,7 @@ export const postTrelloCard: RequestHandler = async (req, res, next) => {
 		if (action?.type === 'addAttachmentToCard') {
 			const attachment: { text: string; url: string } = action.display.entities.attachment;
 
-			if (deal) {
+			if (deal && attachment.url.includes('.pdf')) {
 				await pipedriveCreateNote(deal.id, `[${attachment.url}] ${attachment.text}`);
 
 				// [PIPEDRIVE] MOVE TO Redo för säljmöte

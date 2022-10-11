@@ -37,9 +37,3 @@ routing(app);
 app.use(errorMiddleware);
 
 connection(app);
-
-import { trelloGetLists } from 'utils/trello';
-
-(async function(){
-	console.log(await trelloGetLists())
-}())
