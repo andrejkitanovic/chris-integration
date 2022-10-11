@@ -55,7 +55,7 @@ const trelloGetLists = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.trelloGetLists = trelloGetLists;
 const trelloGetListCards = () => __awaiter(void 0, void 0, void 0, function* () {
-    const { data } = yield trelloAPI.get(`/1/lists/${process.env.TRELLO_LIST_ID}/cards`);
+    const { data } = yield trelloAPI.get(`/1/boards/${process.env.TRELLO_BOARD_ID}/cards`);
     return data;
 });
 exports.trelloGetListCards = trelloGetListCards;
