@@ -28,7 +28,7 @@ type TrelloCardType = {
 const trelloCardFormat = (body: PipedriveDealType): TrelloCardType => {
 	return {
 		name: body.title,
-		desc: body.next_activity?.public_description ?? '',
+		desc: '',
 		due: body.next_activity
 			? dayjs(`${body.next_activity?.due_date} ${body.next_activity?.due_time}`).subtract(1, 'day').toDate()
 			: null,

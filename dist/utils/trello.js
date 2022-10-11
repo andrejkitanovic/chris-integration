@@ -23,12 +23,12 @@ const trelloAPI = axios_1.default.create({
     },
 });
 const trelloCardFormat = (body) => {
-    var _a, _b, _c, _d;
+    var _a, _b;
     return {
         name: body.title,
-        desc: (_b = (_a = body.next_activity) === null || _a === void 0 ? void 0 : _a.public_description) !== null && _b !== void 0 ? _b : '',
+        desc: '',
         due: body.next_activity
-            ? (0, dayjs_1.default)(`${(_c = body.next_activity) === null || _c === void 0 ? void 0 : _c.due_date} ${(_d = body.next_activity) === null || _d === void 0 ? void 0 : _d.due_time}`).subtract(1, 'day').toDate()
+            ? (0, dayjs_1.default)(`${(_a = body.next_activity) === null || _a === void 0 ? void 0 : _a.due_date} ${(_b = body.next_activity) === null || _b === void 0 ? void 0 : _b.due_time}`).subtract(1, 'day').toDate()
             : null,
     };
 };
